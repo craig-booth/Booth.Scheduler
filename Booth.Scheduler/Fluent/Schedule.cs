@@ -6,35 +6,53 @@ namespace Booth.Scheduler.Fluent
 {
     public class Schedule
     {
-        public static DailySchedule EveryDay()
+        public static DayScheduleBuilder EveryDay()
         {
-            return new DailySchedule(1);
+            var template = new ScheduleTemplate();
+            template.DateTemplate = new DailyScheduleTemplate();
+
+            return new DayScheduleBuilder(template);
         }
 
-        public static DailySchedule EveryDays(int every)
+        public static DayScheduleBuilder EveryDays(int every)
         {
-            return new DailySchedule(every);
+            var template = new ScheduleTemplate();
+            template.DateTemplate = new DailyScheduleTemplate(every);
+
+            return new DayScheduleBuilder(template);
         }
 
-        public static WeeklySchedule EveryWeek()
+        public static WeekScheduleBuilder EveryWeek()
         {
-            return new WeeklySchedule(1);
+            var template = new ScheduleTemplate();
+            template.DateTemplate = new DailyScheduleTemplate();
+
+            return new WeekScheduleBuilder(template);
         }
 
-        public static WeeklySchedule EveryWeeks(int every)
+        public static WeekScheduleBuilder EveryWeeks(int every)
         {
-            return new WeeklySchedule(every);
+            var template = new ScheduleTemplate();
+            template.DateTemplate = new DailyScheduleTemplate(every);
+
+            return new WeekScheduleBuilder(template);
+        }
+        
+        public static MonthScheduleBuilder EveryMonth()
+        {
+            var template = new ScheduleTemplate();
+            template.DateTemplate = new MonthlyScheduleTemplate();
+
+            return new MonthScheduleBuilder(template);
         }
 
-        public static MonthlySchedule EveryMonth()
+        public static MonthScheduleBuilder EveryMonths(int every)
         {
-            return new MonthlySchedule(1);
-        }
+            var template = new ScheduleTemplate();
+            template.DateTemplate = new MonthlyScheduleTemplate(every);
 
-        public static MonthlySchedule EveryMonths(int every)
-        {
-            return new MonthlySchedule(every);
+            return new MonthScheduleBuilder(template);
         }
-
+         
     }
 }

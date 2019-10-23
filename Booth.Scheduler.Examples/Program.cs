@@ -10,27 +10,36 @@ namespace Booth.Scheduler.Examples
         static void Main(string[] args)
         {
             // Schedule every 3 days
-            var dailyTemplate = new DateTemplate(3, DateUnit.Days);
+            var dailyTemplate = new DailyScheduleTemplate()
+            {
+                Every = 3
+            };
+            Schedule.EveryDays(3).At(9, 30);
 
-            Schedule.EveryDays(3).Between(DateTime.Today, DateTime.Today.AddYears(1));
+
+         //   Schedule.EveryDays(3).Between(DateTime.Today, DateTime.Today.AddYears(1));
 
             // Schedule weekly on monday and friday
-            var weeklyTemplate = new DateTemplate(1, DateUnit.Weeks);
-            weeklyTemplate.Flags[1] = true;
-            weeklyTemplate.Flags[5] = true;
+            var weeklyTemplate = new WeeklyScheduleTemplate();
+            weeklyTemplate[DayOfWeek.Monday] = true;
+            weeklyTemplate[DayOfWeek.Friday] = true;
 
-            Schedule.EveryWeek().On(DayOfWeek.Monday).On(DayOfWeek.Friday);
+            //    Schedule.EveryWeek().On(DayOfWeek.Monday).On(DayOfWeek.Friday);
+            Schedule.EveryWeek().OnMonday().AndOnFriday().At(10, 30);
+
+            //    Schedule.EveryMonth().On(Occurance.First, DayOfWeek.Thursday).At(9, 30);
+            Schedule.EveryMonth().OnFirst(DayOfWeek.Thursday).At(9, 30);
 
 
-            Schedule.EveryMonth().On(Occurance.First, DayOfWeek.Thursday).At(9, 30);
-
-            Schedule.EveryDay().EveryHour().Between(9, 00, 17, 00);
+            // Schedule.EveryDay().EveryHour().Between(9, 00, 17, 00);
+            Schedule.EveryDay().EveryHour().From(9, 00).Until(17, 00);
 
             // Schedule every 3 days at 3am
             //  Schedule.Daily().Every(3, DateUnit.Days).At(3, 00);
 
             // Schedule every day to run hourly between 9am and 5pm
-            //  Schedule.Daily().Every(1, TimeUnit.Hours).From(9, 00).To(17, 00);
+            //  Schedule.Daily().Every(2, TimeUnit.Hours).From(9, 00).To(17, 00);
+            Schedule.EveryDay().EveryHours(2).From(9, 00).Until(17, 00);
 
             Console.WriteLine("Hello World!");
         }
