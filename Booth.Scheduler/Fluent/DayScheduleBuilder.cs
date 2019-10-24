@@ -7,9 +7,9 @@ namespace Booth.Scheduler.Fluent
     public class DayScheduleBuilder
     {
         private readonly ScheduleTemplate _Template;
-        public DayScheduleBuilder(ScheduleTemplate Template)
+        public DayScheduleBuilder(ScheduleTemplate template)
         {
-            _Template = new ScheduleTemplate();
+            _Template = template;
         }
 
         public ScheduleTemplate At(int hour, int minute)

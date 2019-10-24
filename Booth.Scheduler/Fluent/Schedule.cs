@@ -25,7 +25,7 @@ namespace Booth.Scheduler.Fluent
         public static WeekScheduleBuilder EveryWeek()
         {
             var template = new ScheduleTemplate();
-            template.DateTemplate = new DailyScheduleTemplate();
+            template.DateTemplate = new WeeklyScheduleTemplate();
 
             return new WeekScheduleBuilder(template);
         }
@@ -33,7 +33,7 @@ namespace Booth.Scheduler.Fluent
         public static WeekScheduleBuilder EveryWeeks(int every)
         {
             var template = new ScheduleTemplate();
-            template.DateTemplate = new DailyScheduleTemplate(every);
+            template.DateTemplate = new WeeklyScheduleTemplate(every);
 
             return new WeekScheduleBuilder(template);
         }

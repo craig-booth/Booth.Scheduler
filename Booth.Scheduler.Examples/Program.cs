@@ -9,37 +9,42 @@ namespace Booth.Scheduler.Examples
     {
         static void Main(string[] args)
         {
+            ScheduleTemplate template;
+
             // Schedule every 3 days
             var dailyTemplate = new DailyScheduleTemplate()
             {
                 Every = 3
             };
-            Schedule.EveryDays(3).At(9, 30);
+            template = Schedule.EveryDays(3).At(9, 30);
+            Console.WriteLine(template.ToString());
 
-
-         //   Schedule.EveryDays(3).Between(DateTime.Today, DateTime.Today.AddYears(1));
+            //   Schedule.EveryDays(3).Between(DateTime.Today, DateTime.Today.AddYears(1));
 
             // Schedule weekly on monday and friday
             var weeklyTemplate = new WeeklyScheduleTemplate();
             weeklyTemplate[DayOfWeek.Monday] = true;
             weeklyTemplate[DayOfWeek.Friday] = true;
 
+
             //    Schedule.EveryWeek().On(DayOfWeek.Monday).On(DayOfWeek.Friday);
-            Schedule.EveryWeek().OnMonday().AndOnFriday().At(10, 30);
+            template = Schedule.EveryWeek().OnMonday().AndOnFriday().At(10, 30);
+            Console.WriteLine(template.ToString());
 
             //    Schedule.EveryMonth().On(Occurance.First, DayOfWeek.Thursday).At(9, 30);
-            Schedule.EveryMonth().OnFirst(DayOfWeek.Thursday).At(9, 30);
-
+            template = Schedule.EveryMonth().OnFirst(DayOfWeek.Thursday).At(9, 30);
+            Console.WriteLine(template.ToString());
 
             // Schedule.EveryDay().EveryHour().Between(9, 00, 17, 00);
-            Schedule.EveryDay().EveryHour().From(9, 00).Until(17, 00);
-
+            template = Schedule.EveryDay().EveryHour().From(9, 00).Until(17, 00);
+            Console.WriteLine(template.ToString());
             // Schedule every 3 days at 3am
             //  Schedule.Daily().Every(3, DateUnit.Days).At(3, 00);
 
             // Schedule every day to run hourly between 9am and 5pm
             //  Schedule.Daily().Every(2, TimeUnit.Hours).From(9, 00).To(17, 00);
-            Schedule.EveryDay().EveryHours(2).From(9, 00).Until(17, 00);
+            template = Schedule.EveryDay().EveryHours(2).From(9, 00).Until(17, 00);
+            Console.WriteLine(template.ToString());
 
             Console.WriteLine("Hello World!");
         }
