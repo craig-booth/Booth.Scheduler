@@ -16,16 +16,38 @@ namespace Booth.Scheduler
             Every = every;
         }
 
-        public IDateScheduleEnumerator ScheduleEnumerator(DateTime start)
+        public IEnumerable<DateTime> Schedule(DateTime start)
         {
-            return new DailyScheduleEnumerator(this, start);
+            return new DailySchedule(this, start);
         }
     }
 
-    class DailyScheduleEnumerator : IDateScheduleEnumerator
+    public class DailySchedule : IEnumerable<DateTime>
     {
         private DailyScheduleTemplate _Template;
         private DateTime _StartDate;
+        public DailySchedule(DailyScheduleTemplate template, DateTime start)
+        {
+            _Template = template;
+            _StartDate = start;
+        }
+        public IEnumerator<DateTime> GetEnumerator()
+        {
+            return new DailyScheduleEnumerator(_Template, _StartDate);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new DailyScheduleEnumerator(_Template, _StartDate); 
+        }
+    }
+
+    class DailyScheduleEnumerator : IEnumerator<DateTime>
+    {
+        private DailyScheduleTemplate _Template;
+        private DateTime _StartDate;
+        private DateTime _FirstDate;
+        private bool _Initialized;
         public DateTime Current { get; private set; }
 
         object IEnumerator.Current => Current;
@@ -33,7 +55,8 @@ namespace Booth.Scheduler
         public DailyScheduleEnumerator(DailyScheduleTemplate template, DateTime start)
         {
             _Template = template;
-            SetFirstDate(start);
+            _StartDate = start.Date;
+            _Initialized = false;
         }
 
         public void Dispose()
@@ -42,19 +65,29 @@ namespace Booth.Scheduler
 
         public bool MoveNext()
         {
-            Current.AddDays(_Template.Every);
+            if (! _Initialized)
+            {
+                SetFirstDate();
+                _Initialized = true;
+            }
+            else
+                SetNextDate();
             return true;
         }
 
         public void Reset()
         {
-            Current = _StartDate;
+            Current = _FirstDate;
         }
 
-        private void SetFirstDate(DateTime start)
+        private void SetFirstDate()
         {
-            _StartDate = start.Date;
-            Current = _StartDate;
+            _FirstDate = _StartDate;
+            Current = _FirstDate;
+        }
+        private void SetNextDate()
+        {
+            Current = Current.AddDays(_Template.Every);
         }
     }
 }

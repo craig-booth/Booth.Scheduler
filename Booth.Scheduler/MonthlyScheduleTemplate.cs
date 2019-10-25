@@ -20,7 +20,7 @@ namespace Booth.Scheduler
             Every = every;
         }
 
-        public IDateScheduleEnumerator ScheduleEnumerator(DateTime start)
+        public IEnumerable<DateTime> Schedule(DateTime start)
         {
             throw new NotImplementedException();
         }

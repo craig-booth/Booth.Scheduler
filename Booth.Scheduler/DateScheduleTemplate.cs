@@ -5,9 +5,8 @@ using System.Text;
 
 namespace Booth.Scheduler
 {
-    public interface IDateScheduleEnumerator : IEnumerator<DateTime> { }
     public interface IDateScheduleTemplate
     {
-        IDateScheduleEnumerator ScheduleEnumerator(DateTime start);
+        IEnumerable<DateTime> Schedule(DateTime start);
     }
 }

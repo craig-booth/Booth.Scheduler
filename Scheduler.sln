@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Booth.Scheduler", "Booth.Scheduler\Booth.Scheduler.csproj", "{C0F89FEB-1B84-4AB9-90E8-4AD768C860CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booth.Scheduler.Examples", "Booth.Scheduler.Examples\Booth.Scheduler.Examples.csproj", "{6E42296B-59CF-47BB-B75D-68467E08B50B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Booth.Scheduler.Examples", "Booth.Scheduler.Examples\Booth.Scheduler.Examples.csproj", "{6E42296B-59CF-47BB-B75D-68467E08B50B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booth.Scheduler.Test", "Booth.Scheduler.Test\Booth.Scheduler.Test.csproj", "{6EE61010-258B-4409-8ECB-9774F9B4AC8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6E42296B-59CF-47BB-B75D-68467E08B50B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E42296B-59CF-47BB-B75D-68467E08B50B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E42296B-59CF-47BB-B75D-68467E08B50B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EE61010-258B-4409-8ECB-9774F9B4AC8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EE61010-258B-4409-8ECB-9774F9B4AC8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EE61010-258B-4409-8ECB-9774F9B4AC8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EE61010-258B-4409-8ECB-9774F9B4AC8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

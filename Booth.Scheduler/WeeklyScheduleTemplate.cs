@@ -21,7 +21,7 @@ namespace Booth.Scheduler
             get { return _Days[(int)dayOfWeek]; }
             set { _Days[(int)dayOfWeek] = value; }
         }
-        public IDateScheduleEnumerator ScheduleEnumerator(DateTime start)
+        public IEnumerable<DateTime> Schedule(DateTime start)
         {
             throw new NotImplementedException();
         }
