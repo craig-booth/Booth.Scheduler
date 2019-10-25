@@ -20,9 +20,5 @@ namespace Booth.Scheduler
             Every = every;
         }
 
-        public IEnumerable<DateTime> Schedule(DateTime start)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

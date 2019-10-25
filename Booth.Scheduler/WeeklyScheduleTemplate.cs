@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Booth.Scheduler
 {
-    public class WeeklyScheduleTemplate : IDateScheduleTemplate
+    public class WeeklyScheduleTemplate : DateScheduleTemplate, IDateScheduleTemplate
     {
         public int Every { get; set; }
         private bool[] _Days { get; } = new bool[7];
@@ -21,12 +21,35 @@ namespace Booth.Scheduler
             get { return _Days[(int)dayOfWeek]; }
             set { _Days[(int)dayOfWeek] = value; }
         }
-        public IEnumerable<DateTime> Schedule(DateTime start)
+
+        internal override DateTime GetPeriodStart(DateTime date)
         {
-            return new WeelySchedule(this, start);
+            return date.AddDays(-(int)date.DayOfWeek);
+        }
+
+        internal override DateTime GetStartOfNextPeriod(DateTime startOfCurrentPeriod)
+        {
+            return startOfCurrentPeriod.AddDays(Every * 7);
+        }
+
+        internal override bool GetNextDateInPeriod(DateTime currentDate, bool firstTime, out DateTime nextDate)
+        {
+            nextDate = currentDate;
+
+            while (nextDate.DayOfWeek < DayOfWeek.Saturday)
+            {
+                if (!firstTime)
+                    nextDate = nextDate.AddDays(1);
+                else
+                    firstTime = false;
+
+                if (this[nextDate.DayOfWeek])
+                    return true;
+            }
+
+            return false;
         }
     }
-
 
     public class WeelySchedule : IEnumerable<DateTime>
     {
@@ -53,7 +76,6 @@ namespace Booth.Scheduler
         private WeeklyScheduleTemplate _Template;
         private DateTime _StartDate;
         private DateTime _PeriodStart;
-        private DateTime _FirstDate;
         private bool _Initialized;
         private bool _NewPeriodStarted;
         public DateTime Current { get; private set; }

@@ -15,9 +15,9 @@ namespace Booth.Scheduler.Test
 
             var startDate = new DateTime(2000, 01, 01, 04, 34, 56);
 
-            var dates = template.Schedule(startDate);
+            var schedule = new ScheduleInstance(template, startDate);
 
-            Assert.That(dates.First(), Is.EqualTo(startDate.Date));
+            Assert.That(schedule.First(), Is.EqualTo(startDate.Date));
         }
 
         [TestCase]
@@ -27,7 +27,7 @@ namespace Booth.Scheduler.Test
 
             var startDate = new DateTime(2000, 02, 26, 04, 34, 56);
 
-            var dates = template.Schedule(startDate).Take(5);
+            var schedule = new ScheduleInstance(template, startDate);
 
             var expected = new DateTime[] {
                 new DateTime(2000, 02, 26),
@@ -35,7 +35,7 @@ namespace Booth.Scheduler.Test
                 new DateTime(2000, 02, 28),
                 new DateTime(2000, 02, 29),
                 new DateTime(2000, 03, 01)};
-            Assert.That(dates, Is.EqualTo(expected));
+            Assert.That(schedule.Take(5), Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -45,7 +45,7 @@ namespace Booth.Scheduler.Test
 
             var startDate = new DateTime(2000, 02, 26, 04, 34, 56);
 
-            var dates = template.Schedule(startDate).Take(5);
+            var schedule = new ScheduleInstance(template, startDate);
 
             var expected = new DateTime[] {
                 new DateTime(2000, 02, 26),
@@ -53,7 +53,7 @@ namespace Booth.Scheduler.Test
                 new DateTime(2000, 03, 03),
                 new DateTime(2000, 03, 06),
                 new DateTime(2000, 03, 09)};
-            Assert.That(dates, Is.EqualTo(expected));
+            Assert.That(schedule.Take(5), Is.EqualTo(expected));
         }
 
     }

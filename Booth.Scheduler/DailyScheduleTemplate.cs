@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Booth.Scheduler
 {
-    public class DailyScheduleTemplate : IDateScheduleTemplate
+    public class DailyScheduleTemplate : DateScheduleTemplate, IDateScheduleTemplate
     {
         public int Every { get; set; }
 
@@ -16,78 +16,20 @@ namespace Booth.Scheduler
             Every = every;
         }
 
-        public IEnumerable<DateTime> Schedule(DateTime start)
+        internal override DateTime GetPeriodStart(DateTime date)
         {
-            return new DailySchedule(this, start);
-        }
-    }
-
-    public class DailySchedule : IEnumerable<DateTime>
-    {
-        private DailyScheduleTemplate _Template;
-        private DateTime _StartDate;
-        public DailySchedule(DailyScheduleTemplate template, DateTime start)
-        {
-            _Template = template;
-            _StartDate = start;
-        }
-        public IEnumerator<DateTime> GetEnumerator()
-        {
-            return new DailyScheduleEnumerator(_Template, _StartDate);
+            return date;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        internal override DateTime GetStartOfNextPeriod(DateTime startOfCurrentPeriod)
         {
-            return new DailyScheduleEnumerator(_Template, _StartDate); 
-        }
-    }
-
-    class DailyScheduleEnumerator : IEnumerator<DateTime>
-    {
-        private DailyScheduleTemplate _Template;
-        private DateTime _StartDate;
-        private DateTime _FirstDate;
-        private bool _Initialized;
-        public DateTime Current { get; private set; }
-
-        object IEnumerator.Current => Current;
-
-        public DailyScheduleEnumerator(DailyScheduleTemplate template, DateTime start)
-        {
-            _Template = template;
-            _StartDate = start.Date;
-            _Initialized = false;
+            return startOfCurrentPeriod.AddDays(Every);
         }
 
-        public void Dispose()
+        internal override bool GetNextDateInPeriod(DateTime currentDate, bool firstTime, out DateTime nextDate)
         {
-        }
-
-        public bool MoveNext()
-        {
-            if (! _Initialized)
-            {
-                SetFirstDate();
-                _Initialized = true;
-            }
-            else
-                SetNextDate();
-            return true;
-        }
-
-        public void Reset()
-        {
-            Current = _FirstDate;
-        }
-
-        private void SetFirstDate()
-        {
-            _FirstDate = _StartDate;
-            Current = _FirstDate;
-        }
-        private void SetNextDate()
-        {
-            Current = Current.AddDays(_Template.Every);
+            nextDate = currentDate;
+            return firstTime;
         }
     }
 }

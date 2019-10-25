@@ -7,6 +7,12 @@ namespace Booth.Scheduler
 {
     public interface IDateScheduleTemplate
     {
-        IEnumerable<DateTime> Schedule(DateTime start);
+    }
+    
+    public abstract class DateScheduleTemplate
+    {
+        abstract internal DateTime GetPeriodStart(DateTime date);
+        abstract internal DateTime GetStartOfNextPeriod(DateTime startOfCurrentPeriod);
+        abstract internal bool GetNextDateInPeriod(DateTime currentDate, bool firstTime, out DateTime nextDate);
     }
 }
