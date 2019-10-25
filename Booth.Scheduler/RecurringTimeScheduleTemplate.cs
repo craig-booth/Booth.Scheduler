@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Booth.Scheduler
 {
-    public class RecurringTimeScheduleTemplate : TimeScheduleTemplate
+    public class RecurringTimeScheduleTemplate : ITimeScheduleTemplate
     {
         public int Every { get; set; }
 
@@ -26,6 +26,11 @@ namespace Booth.Scheduler
         public void To(int hour, int minute)
         {
             ToTime = new TimeSpan(hour, minute, 0);
+        }
+
+        public ITimeScheduleEnumerator ScheduleEnumerator(DateTime date)
+        {
+            throw new NotSupportedException();
         }
     }
 }

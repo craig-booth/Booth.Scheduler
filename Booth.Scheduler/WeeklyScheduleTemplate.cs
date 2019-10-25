@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Booth.Scheduler
 {
-    public class WeeklyScheduleTemplate : DateScheduleTemplate
+    public class WeeklyScheduleTemplate : IDateScheduleTemplate
     {
         public int Every { get; set; }
         private bool[] _Days { get; } = new bool[7];
@@ -20,6 +20,10 @@ namespace Booth.Scheduler
         {
             get { return _Days[(int)dayOfWeek]; }
             set { _Days[(int)dayOfWeek] = value; }
+        }
+        public IDateScheduleEnumerator ScheduleEnumerator(DateTime start)
+        {
+            throw new NotImplementedException();
         }
     }
 }

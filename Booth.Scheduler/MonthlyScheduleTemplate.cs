@@ -5,7 +5,7 @@ using System.Text;
 namespace Booth.Scheduler
 {
     public enum Occurance { None, First, Second, Third, Fourth, Last }
-    public class MonthlyScheduleTemplate : DateScheduleTemplate
+    public class MonthlyScheduleTemplate : IDateScheduleTemplate
     {
         public int Every { get; set; }
 
@@ -20,5 +20,9 @@ namespace Booth.Scheduler
             Every = every;
         }
 
+        public IDateScheduleEnumerator ScheduleEnumerator(DateTime start)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

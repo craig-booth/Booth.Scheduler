@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Booth.Scheduler
 {
-
-    public abstract class TimeScheduleTemplate
+    public interface ITimeScheduleEnumerator : IEnumerator<DateTime> { }
+    public interface ITimeScheduleTemplate
     {
-
+        ITimeScheduleEnumerator ScheduleEnumerator(DateTime date);
     }
 
 }

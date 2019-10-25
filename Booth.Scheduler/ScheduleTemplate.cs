@@ -6,7 +6,7 @@ namespace Booth.Scheduler
 {
     public class ScheduleTemplate
     {
-        public DateScheduleTemplate DateTemplate { get; set; }
-        public TimeScheduleTemplate TimeTemplate { get; set; }
+        public IDateScheduleTemplate DateTemplate { get; set; }
+        public ITimeScheduleTemplate TimeTemplate { get; set; }
     }
 }
