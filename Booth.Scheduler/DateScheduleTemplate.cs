@@ -7,6 +7,7 @@ namespace Booth.Scheduler
 {
     public interface IDateScheduleTemplate
     {
+
     }
     
     public abstract class DateScheduleTemplate

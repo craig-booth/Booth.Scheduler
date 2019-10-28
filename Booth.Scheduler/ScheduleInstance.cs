@@ -7,14 +7,15 @@ namespace Booth.Scheduler
 {
     public class ScheduleInstance : IEnumerable<DateTime>
     {
-        private DateScheduleTemplate _Template;
-        private DateTime _Start;
+        private readonly ScheduleTemplate _Template;
+        private readonly DateTime _Start;
 
-        public ScheduleInstance(DateScheduleTemplate template, DateTime start)
+        public ScheduleInstance(ScheduleTemplate template, DateTime start)
         {
             _Template = template;
             _Start = start;
         }
+
         public IEnumerator<DateTime> GetEnumerator()
         {
             return new ScheduleEnumerator(_Template, _Start);
@@ -27,77 +28,62 @@ namespace Booth.Scheduler
 
         private class ScheduleEnumerator : IEnumerator<DateTime>
         {
-            private DateScheduleTemplate _Template;
-            private DateTime _StartDate;
-            private DateTime _PeriodStart;
-            private bool _Initialized;
-            private bool _NewPeriodStarted;
+            private bool _Initalized;
+            private readonly IEnumerator<DateTime> _DateEnumerator;
+            private readonly IEnumerator<TimeSpan> _TimeEnumerator;
+
             public DateTime Current { get; private set; }
 
             object IEnumerator.Current => Current;
 
-            public ScheduleEnumerator(DateScheduleTemplate template, DateTime start)
+            public ScheduleEnumerator(ScheduleTemplate template, DateTime start)
             {
-                _Template = template;
-                _StartDate = start.Date;
-                _Initialized = false;
+                _DateEnumerator = new DateScheduleEnumerator(template.DateTemplate as DateScheduleTemplate, start);
+                _TimeEnumerator = new TimeScheduleEnumerator(template.TimeTemplate);
+                _Initalized = false;
             }
 
             public void Dispose()
             {
+                _DateEnumerator.Dispose();
+                _TimeEnumerator.Dispose();
             }
 
             public bool MoveNext()
             {
-                if (!_Initialized)
+                if (!_Initalized)
                 {
-                    _Initialized = true;
-
-                    _PeriodStart = _Template.GetPeriodStart(_StartDate);
-                    Current = _PeriodStart;
-                    _NewPeriodStarted = true;
+                    if (!_DateEnumerator.MoveNext())
+                        return false;
                 }
 
-                while (true)
+                if (_TimeEnumerator.MoveNext())
                 {
-                    SetNextDate();
-
-                    if (Current >= _StartDate)
-                        break; ;
+                    Current = _DateEnumerator.Current.Add(_TimeEnumerator.Current);
+                    return true;
+                }
+                
+                if (_DateEnumerator.MoveNext())
+                {
+                    _TimeEnumerator.Reset();
+                    _TimeEnumerator.MoveNext();
+                    Current = _DateEnumerator.Current.Add(_TimeEnumerator.Current);
+                    return true;
                 }
 
-                return true;
+                return false;
             }
 
             public void Reset()
             {
-                _Initialized = false;
+                _DateEnumerator.Reset();
+                _TimeEnumerator.Reset();
+                _Initalized = false;
             }
-
-            private void SetNextDate()
-            {
-                if (!GetNextDateInPeriod())
-                {
-                    _PeriodStart = _Template.GetStartOfNextPeriod(_PeriodStart);
-                    Current = _PeriodStart;
-                    _NewPeriodStarted = true;
-
-                    GetNextDateInPeriod();
-                }
-            }
-
-            private bool GetNextDateInPeriod()
-            {       
-                var found = _Template.GetNextDateInPeriod(Current, _NewPeriodStarted, out var nextDate);        
-                if (found)
-                    Current = nextDate;
-
-                _NewPeriodStarted = false;
-                return found;
-            }
-
- 
         }
+
+
+        
     }
 
 }
