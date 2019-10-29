@@ -30,5 +30,15 @@ namespace Booth.Scheduler
         {
             ToTime = new TimeSpan(hour, minute, 0);
         }
+
+        public IEnumerable<TimeSpan> GetTimes()
+        {
+            var nextTime = FromTime;           
+            while (nextTime <= ToTime)
+            {
+                yield return nextTime;
+                nextTime = nextTime.Add(TimeIncrement);
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace Booth.Scheduler.Test
         {
             var template = new ExactTimeScheduleTemplate(13, 32);
 
-            var actual = new TimeScheduleEnumerator(template).AsEnumerable();
+            var actual = template.GetTimes();
 
             var expected = new TimeSpan[] {
                 new TimeSpan(13, 32, 00)

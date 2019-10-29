@@ -6,6 +6,6 @@ namespace Booth.Scheduler
 {
     public interface ITimeScheduleTemplate 
     {
+        IEnumerable<TimeSpan> GetTimes();
     }
-
 }

@@ -13,6 +13,9 @@ namespace Booth.Scheduler
         {
             Time = new TimeSpan(hour, minute, 0);
         }
-  
+        public IEnumerable<TimeSpan> GetTimes()
+        {
+            yield return Time;
+        }
     }
 }

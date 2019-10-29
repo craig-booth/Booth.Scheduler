@@ -30,12 +30,12 @@ namespace Booth.Scheduler.Test
         }
 
         [TestCase]
-        public void DailyEvery3HoursFrom9To5()
+        public void DailyEvery3HoursFrom9To19()
         {
             var dateTemplate = new DailyScheduleTemplate();
             var timeTemplate = new HourlyScheduleTemplate(3);
             timeTemplate.From(9, 00);
-            timeTemplate.From(17, 00);
+            timeTemplate.To(19, 00);
             var template = new ScheduleTemplate(dateTemplate, timeTemplate);
 
             var startDate = new DateTime(2019, 10, 23, 04, 34, 56);
@@ -45,12 +45,12 @@ namespace Booth.Scheduler.Test
             var expected = new DateTime[] {
                 new DateTime(2019, 10, 23, 09, 00, 00),
                 new DateTime(2019, 10, 23, 12, 00, 00),
-                new DateTime(2019, 10, 23, 03, 00, 00),
-                new DateTime(2019, 10, 23, 06, 00, 00),
+                new DateTime(2019, 10, 23, 15, 00, 00),
+                new DateTime(2019, 10, 23, 18, 00, 00),
                 new DateTime(2019, 10, 24, 09, 00, 00),
                 new DateTime(2019, 10, 24, 12, 00, 00),
-                new DateTime(2019, 10, 24, 03, 00, 00),
-                new DateTime(2019, 10, 24, 06, 00, 00)
+                new DateTime(2019, 10, 24, 15, 00, 00),
+                new DateTime(2019, 10, 24, 18, 00, 00)
             };
 
             Assert.That(schedule.Take(8), Is.EqualTo(expected));

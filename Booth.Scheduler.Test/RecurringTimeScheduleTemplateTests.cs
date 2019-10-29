@@ -13,7 +13,7 @@ namespace Booth.Scheduler.Test
         {
             var template = new HourlyScheduleTemplate(1);
 
-            var actual = new TimeScheduleEnumerator(template).AsEnumerable();
+            var actual = template.GetTimes();
 
             var expected = new TimeSpan[]
             {
@@ -52,7 +52,7 @@ namespace Booth.Scheduler.Test
             template.From(9, 00);
             template.To(17, 00);
 
-            var actual = new TimeScheduleEnumerator(template).AsEnumerable();
+            var actual = template.GetTimes();
 
             var expected = new TimeSpan[]
             {
@@ -77,7 +77,7 @@ namespace Booth.Scheduler.Test
             template.From(9, 05);
             template.To(17, 30);
 
-            var actual = new TimeScheduleEnumerator(template).AsEnumerable();
+            var actual = template.GetTimes();
 
             var expected = new TimeSpan[]
             {
@@ -95,7 +95,7 @@ namespace Booth.Scheduler.Test
         {
             var template = new HourlyScheduleTemplate(15);
 
-            var actual = new TimeScheduleEnumerator(template).AsEnumerable();
+            var actual = template.GetTimes();
 
             var expected = new TimeSpan[]
             {
@@ -106,11 +106,27 @@ namespace Booth.Scheduler.Test
         }
 
         [TestCase]
+        public void RecurranceGreaterThanOneDay()
+        {
+            var template = new HourlyScheduleTemplate(25);
+            template.From(11, 00);
+            template.To(14, 00);
+
+            var actual = template.GetTimes();
+
+            var expected = new TimeSpan[]
+            {
+                new TimeSpan(11, 00, 00)
+            };
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [TestCase]
         public void Every150MinutesWithNoStartAndEndTime()
         {
             var template = new MinuteScheduleTemplate(150);
 
-            var actual = new TimeScheduleEnumerator(template).AsEnumerable();
+            var actual = template.GetTimes();
 
             var expected = new TimeSpan[]
             {
@@ -135,7 +151,7 @@ namespace Booth.Scheduler.Test
             template.From(10, 00);
             template.To(12, 00);
 
-            var actual = new TimeScheduleEnumerator(template).AsEnumerable();
+            var actual = template.GetTimes();
 
             var expected = new TimeSpan[]
             {

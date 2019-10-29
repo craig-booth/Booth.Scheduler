@@ -15,9 +15,9 @@ namespace Booth.Scheduler.Test
 
             var startDate = new DateTime(2019, 10, 23, 04, 34, 56);
 
-            var actual = new DateScheduleEnumerator(template, startDate).AsEnumerable();
+            var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual.First(), Is.EqualTo(startDate.Date));
+            Assert.That(actual, Is.EqualTo(startDate.Date));
         }
 
         [TestCase]
@@ -28,9 +28,9 @@ namespace Booth.Scheduler.Test
 
             var startDate = new DateTime(2019, 10, 21, 04, 34, 56);
 
-            var actual = new DateScheduleEnumerator(template, startDate).AsEnumerable();
+            var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual.First(), Is.EqualTo(new DateTime(2019, 10, 23)));
+            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 23)));
         }
 
         [TestCase]
@@ -41,9 +41,9 @@ namespace Booth.Scheduler.Test
 
             var startDate = new DateTime(2019, 10, 25, 04, 34, 56);
 
-            var actual = new DateScheduleEnumerator(template, startDate).AsEnumerable();
+            var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual.First(), Is.EqualTo(new DateTime(2019, 10, 30)));
+            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 30)));
         }
 
         [TestCase]
@@ -55,9 +55,9 @@ namespace Booth.Scheduler.Test
 
             var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
 
-            var actual = new DateScheduleEnumerator(template, startDate).AsEnumerable();
+            var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual.First(), Is.EqualTo(new DateTime(2019, 10, 26)));
+            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 26)));
         }
 
         [TestCase]
@@ -68,7 +68,7 @@ namespace Booth.Scheduler.Test
 
             var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
 
-            var actual = new DateScheduleEnumerator(template, startDate).AsEnumerable();
+            var actual = template.GetDates(startDate).Take(5);
 
             var expected = new DateTime[] {
                 new DateTime(2019, 10, 28),
@@ -77,7 +77,7 @@ namespace Booth.Scheduler.Test
                 new DateTime(2019, 11, 18),
                 new DateTime(2019, 11, 25)};
 
-            Assert.That(actual.Take(5), Is.EqualTo(expected));
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -89,7 +89,7 @@ namespace Booth.Scheduler.Test
 
             var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
 
-            var actual = new DateScheduleEnumerator(template, startDate).AsEnumerable();
+            var actual = template.GetDates(startDate).Take(5);
 
             var expected = new DateTime[] {
                 new DateTime(2019, 10, 27),
@@ -98,7 +98,7 @@ namespace Booth.Scheduler.Test
                 new DateTime(2019, 11, 06),
                 new DateTime(2019, 11, 10)};
 
-            Assert.That(actual.Take(5), Is.EqualTo(expected));
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [TestCase]
@@ -113,7 +113,7 @@ namespace Booth.Scheduler.Test
 
             var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
 
-            var actual = new DateScheduleEnumerator(template, startDate).AsEnumerable();
+            var actual = template.GetDates(startDate).Take(10);
 
             var expected = new DateTime[] {
                 new DateTime(2019, 10, 24),
@@ -127,7 +127,7 @@ namespace Booth.Scheduler.Test
                 new DateTime(2019, 12, 17),
                 new DateTime(2019, 12, 18)};
 
-            Assert.That(actual.Take(10), Is.EqualTo(expected));
+            Assert.That(actual, Is.EqualTo(expected));
         }
     }
 }
