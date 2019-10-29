@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Booth.Scheduler
 {
-    public class WeeklyScheduleTemplate : DateScheduleTemplate, IDateScheduleTemplate
+    public class WeeklyScheduleTemplate : DateScheduleTemplate
     {
         public int Every { get; set; }
         private bool[] _Days { get; } = new bool[7];
@@ -22,17 +22,17 @@ namespace Booth.Scheduler
             set { _Days[(int)dayOfWeek] = value; }
         }
 
-        internal override DateTime GetPeriodStart(DateTime date)
+        protected override DateTime GetPeriodStart(DateTime date)
         {
             return date.AddDays(-(int)date.DayOfWeek);
         }
 
-        internal override DateTime GetStartOfNextPeriod(DateTime startOfCurrentPeriod)
+        protected override DateTime GetStartOfNextPeriod(DateTime startOfCurrentPeriod)
         {
             return startOfCurrentPeriod.AddDays(Every * 7);
         }
 
-        internal override bool GetNextDateInPeriod(DateTime currentDate, bool firstTime, out DateTime nextDate)
+        protected override bool GetNextDateInPeriod(DateTime currentDate, bool firstTime, out DateTime nextDate)
         {
             nextDate = currentDate;
 
@@ -51,115 +51,4 @@ namespace Booth.Scheduler
         }
     }
 
-    public class WeelySchedule : IEnumerable<DateTime>
-    {
-        private WeeklyScheduleTemplate _Template;
-        private DateTime _StartDate;
-        public WeelySchedule(WeeklyScheduleTemplate template, DateTime start)
-        {
-            _Template = template;
-            _StartDate = start;
-        }
-        public IEnumerator<DateTime> GetEnumerator()
-        {
-            return new WeeklyScheduleEnumerator(_Template, _StartDate);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return new WeeklyScheduleEnumerator(_Template, _StartDate);
-        }
-    }
-
-    class WeeklyScheduleEnumerator : IEnumerator<DateTime>
-    {
-        private WeeklyScheduleTemplate _Template;
-        private DateTime _StartDate;
-        private DateTime _PeriodStart;
-        private bool _Initialized;
-        private bool _NewPeriodStarted;
-        public DateTime Current { get; private set; }
-
-        object IEnumerator.Current => Current;
-
-        public WeeklyScheduleEnumerator(WeeklyScheduleTemplate template, DateTime start)
-        {
-            _Template = template;
-            _StartDate = start.Date;            
-            _Initialized = false;
-        }
-
-        public void Dispose()
-        {
-        }
-
-        public bool MoveNext()
-        {
-            if (!_Initialized)
-            {
-                SetFirstDate();
-                _Initialized = true;
-            }
-            else
-                SetNextDate();
-            return true;
-        }
-
-        public void Reset()
-        {
-            _Initialized = false;
-        }
-
-        private void SetFirstDate()
-        {
-            SetPeriodStart(_StartDate);
-
-            while (true)
-            {
-                SetNextDate();
-
-                if (Current >= _StartDate)
-                    return;
-            }
-        }
-
-        private void SetNextDate()
-        {
-            if (GetNextDateInPeriod())
-                return;
-
-            MoveToNextPeriod();
-
-            GetNextDateInPeriod();
-        }
-
-        private bool GetNextDateInPeriod()
-        {
-            while (Current.DayOfWeek < DayOfWeek.Saturday)
-            {
-                if (!_NewPeriodStarted)
-                    Current = Current.AddDays(1);
-                else
-                    _NewPeriodStarted = false;
-
-                if (_Template[Current.DayOfWeek])
-                    return true;
-            }
-
-            return false;
-        }
-        
-        private void MoveToNextPeriod()
-        {
-            _PeriodStart = _PeriodStart.AddDays(_Template.Every * 7);
-            Current = _PeriodStart;
-            _NewPeriodStarted = true;
-        }
-        private void SetPeriodStart(DateTime date)
-        {
-            _PeriodStart = date.AddDays(-(int)date.DayOfWeek);
-            Current = _PeriodStart;
-            _NewPeriodStarted = true;
-        }
-    }
 }

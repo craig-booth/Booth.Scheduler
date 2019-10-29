@@ -1,21 +1,24 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Booth.Scheduler
 {
-    public class RecurringTimeScheduleTemplate : ITimeScheduleTemplate
+    public abstract class RecurringTimeScheduleTemplate : ITimeScheduleTemplate
     {
         public int Every { get; set; }
 
-        public TimeSpan FromTime { get; set; }
-        public TimeSpan ToTime { get; set; }
+        public TimeSpan FromTime { get; private set; }
+        public TimeSpan ToTime { get; private set; }
+        internal abstract TimeSpan TimeIncrement { get; set; }
 
         public RecurringTimeScheduleTemplate() : this(1) { }
 
         public RecurringTimeScheduleTemplate(int every)
         {
             Every = every;
+            FromTime = new TimeSpan(0, 0, 0);
+            ToTime = new TimeSpan(23, 59, 0);
         }
 
         public void From(int hour, int minute)
@@ -28,9 +31,14 @@ namespace Booth.Scheduler
             ToTime = new TimeSpan(hour, minute, 0);
         }
 
-        public ITimeScheduleEnumerator ScheduleEnumerator(DateTime date)
+        public IEnumerable<TimeSpan> GetTimes()
         {
-            throw new NotSupportedException();
+            var nextTime = FromTime;           
+            while (nextTime <= ToTime)
+            {
+                yield return nextTime;
+                nextTime = nextTime.Add(TimeIncrement);
+            }
         }
     }
 }

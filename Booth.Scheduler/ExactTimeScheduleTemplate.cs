@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,10 +13,9 @@ namespace Booth.Scheduler
         {
             Time = new TimeSpan(hour, minute, 0);
         }
-
-        public ITimeScheduleEnumerator ScheduleEnumerator(DateTime date)
+        public IEnumerable<TimeSpan> GetTimes()
         {
-            throw new NotSupportedException();
+            yield return Time;
         }
     }
 }

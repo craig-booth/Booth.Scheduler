@@ -16,17 +16,17 @@ namespace Booth.Scheduler
             Every = every;
         }
 
-        internal override DateTime GetPeriodStart(DateTime date)
+        protected override DateTime GetPeriodStart(DateTime date)
         {
             return date;
         }
 
-        internal override DateTime GetStartOfNextPeriod(DateTime startOfCurrentPeriod)
+        protected override DateTime GetStartOfNextPeriod(DateTime startOfCurrentPeriod)
         {
             return startOfCurrentPeriod.AddDays(Every);
         }
 
-        internal override bool GetNextDateInPeriod(DateTime currentDate, bool firstTime, out DateTime nextDate)
+        protected override bool GetNextDateInPeriod(DateTime currentDate, bool firstTime, out DateTime nextDate)
         {
             nextDate = currentDate;
             return firstTime;

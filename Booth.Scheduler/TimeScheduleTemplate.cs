@@ -4,10 +4,8 @@ using System.Text;
 
 namespace Booth.Scheduler
 {
-    public interface ITimeScheduleEnumerator : IEnumerator<DateTime> { }
-    public interface ITimeScheduleTemplate
+    public interface ITimeScheduleTemplate 
     {
-        ITimeScheduleEnumerator ScheduleEnumerator(DateTime date);
+        IEnumerable<TimeSpan> GetTimes();
     }
-
 }

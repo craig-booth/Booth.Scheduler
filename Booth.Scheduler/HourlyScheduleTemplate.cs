@@ -6,7 +6,14 @@ namespace Booth.Scheduler
 {
     public class HourlyScheduleTemplate : RecurringTimeScheduleTemplate
     {
-        public HourlyScheduleTemplate() : base() { }
-        public HourlyScheduleTemplate(int every) : base(every) { }
+        internal override TimeSpan TimeIncrement { get; set; }
+
+        public HourlyScheduleTemplate() : this(1) { }
+        public HourlyScheduleTemplate(int every) : base(every) 
+        {
+            TimeIncrement = new TimeSpan(every, 0, 0);
+        }
+
+
     }
 }
