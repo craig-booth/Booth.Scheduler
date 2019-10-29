@@ -19,8 +19,6 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(startDate.Date));
-
             Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 07)));
         }
 
@@ -36,7 +34,7 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 04)));
+            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 09)));
         }
 
         [TestCase]
@@ -131,7 +129,7 @@ namespace Booth.Scheduler.Test
         [TestCase]
         public void RunEvery3MonthsOnFirstDay()
         {
-            var template = new MonthlyScheduleTemplate(1);
+            var template = new MonthlyScheduleTemplate(3);
             template.OccuranceType = OccuranceType.Day;
             template.Occurance = Occurance.First;
 
@@ -152,7 +150,7 @@ namespace Booth.Scheduler.Test
         [TestCase]
         public void RunEvery2MonthsOnLastDay()
         {
-            var template = new MonthlyScheduleTemplate(1);
+            var template = new MonthlyScheduleTemplate(2);
             template.OccuranceType = OccuranceType.Day;
             template.Occurance = Occurance.Last;
 
@@ -173,9 +171,9 @@ namespace Booth.Scheduler.Test
         [TestCase]
         public void RunEvery2MonthsOnFirstWeekDay()
         {
-            var template = new MonthlyScheduleTemplate(1);
+            var template = new MonthlyScheduleTemplate(2);
             template.OccuranceType = OccuranceType.Weekday;
-            template.Occurance = Occurance.Last;
+            template.Occurance = Occurance.First;
 
             var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
 
@@ -204,10 +202,10 @@ namespace Booth.Scheduler.Test
 
             var expected = new DateTime[] {
                 new DateTime(2019, 10, 31),
-                new DateTime(2019, 11, 30),
-                new DateTime(2020, 11, 31),
+                new DateTime(2019, 11, 29),
+                new DateTime(2019, 12, 31),
                 new DateTime(2020, 01, 31),
-                new DateTime(2020, 02, 29)};
+                new DateTime(2020, 02, 28)};
 
             Assert.That(actual, Is.EqualTo(expected));
         }

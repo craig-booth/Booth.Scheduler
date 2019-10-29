@@ -81,6 +81,26 @@ namespace Booth.Scheduler.Test
         }
 
         [TestCase]
+        public void RunEvery2WeeksOnMonday()
+        {
+            var template = new WeeklyScheduleTemplate(2);
+            template[DayOfWeek.Monday] = true;
+
+            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+
+            var actual = template.GetDates(startDate).Take(5);
+
+            var expected = new DateTime[] {
+                new DateTime(2019, 10, 28),
+                new DateTime(2019, 11, 11),
+                new DateTime(2019, 11, 25),
+                new DateTime(2019, 12, 09),
+                new DateTime(2019, 12, 23)};
+
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [TestCase]
         public void RunEveryWeekOnWednesdayAndSunday()
         {
             var template = new WeeklyScheduleTemplate(1);
