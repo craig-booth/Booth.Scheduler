@@ -20,26 +20,17 @@ namespace Booth.Scheduler
 
             while (true)
             {
-                var found = GetNextDateInPeriod(currentDate, newPeriodStarted, out var nextDate);
-
-                if (found)
-                {
-                    currentDate = nextDate;
-                    newPeriodStarted = false;
-                }
-                else
+                if (!GetNextDateInPeriod(currentDate, newPeriodStarted, out var nextDate))
                 {
                     periodStart = GetStartOfNextPeriod(periodStart);
-                    currentDate = periodStart;
-
-                    found = GetNextDateInPeriod(currentDate, true, out nextDate);
-                    newPeriodStarted = false;
-                    if (found)
-                        currentDate = nextDate;
+                    GetNextDateInPeriod(periodStart, true, out nextDate);               
                 }
+                
+                if (nextDate >= start.Date)
+                    yield return nextDate;
 
-                if (currentDate >= start.Date)
-                    yield return currentDate;
+                currentDate = nextDate;
+                newPeriodStarted = false;
             }
         }
 
