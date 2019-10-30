@@ -25,23 +25,17 @@ namespace Booth.Scheduler
 
         public IEnumerable<DateTime> GetDates(DateTime start)
         {
+            DateTime nextDate;
             var startDate = start.Date;
             var startOfPeriod = new DateTime(startDate.Year, startDate.Month, 01);
 
-            // Get first date
-            DateTime nextDate;
+            // Get first date     
             while (true)
             {
                 if (OccuranceType == OccuranceType.None)
-                    nextDate = GetDayNumber(startOfPeriod);
-                else if (OccuranceType == OccuranceType.DayOfWeek)
-                    nextDate = GetOccuranceDayOfWeek(startOfPeriod);
-                else if (OccuranceType == OccuranceType.Day)
-                    nextDate = GetOccuranceDay(startOfPeriod);
-                else if (OccuranceType == OccuranceType.Weekday)
-                    nextDate = GetOccuranceWeekDay(startOfPeriod);
+                    nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, DayNumber);
                 else
-                    yield break;
+                    nextDate = GetOccurance(startOfPeriod);
 
                 if (nextDate >= startDate)
                     break;
@@ -56,29 +50,19 @@ namespace Booth.Scheduler
                 startOfPeriod = startOfPeriod.AddMonths(Every);
 
                 if (OccuranceType == OccuranceType.None)
-                    nextDate = GetDayNumber(startOfPeriod);
-                else if (OccuranceType == OccuranceType.DayOfWeek)
-                    nextDate = GetOccuranceDayOfWeek(startOfPeriod);
-                else if (OccuranceType == OccuranceType.Day)
-                    nextDate = GetOccuranceDay(startOfPeriod);
-                else if (OccuranceType == OccuranceType.Weekday)
-                    nextDate = GetOccuranceWeekDay(startOfPeriod);
-                else
-                    yield break;
+                    nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, DayNumber);
+                else 
+                    nextDate = GetOccurance(startOfPeriod);
 
                 yield return nextDate;
             }
         }
 
-        private DateTime GetDayNumber(DateTime startOfPeriod)
-        {
-            return new DateTime(startOfPeriod.Year, startOfPeriod.Month, DayNumber);
-        }
-        private DateTime GetOccuranceDayOfWeek(DateTime startOfPeriod)
+        private DateTime GetOccurance(DateTime startOfPeriod)
         {
             DateTime nextDate;
-            int count = 0;
             int direction;
+            int count;
 
             if (Occurance == Occurance.Last)
             {
@@ -89,93 +73,36 @@ namespace Booth.Scheduler
             else
             {
                 nextDate = startOfPeriod;
+                count = (int)Occurance + 1;
                 direction = 1;
-
-                if (Occurance == Occurance.First)
-                    count = 1;
-                else if (Occurance == Occurance.Second)
-                    count = 2;
-                else if (Occurance == Occurance.Third)
-                    count = 3;
-                else if (Occurance == Occurance.Fourth)
-                    count = 4;
             }
 
-            if (nextDate.DayOfWeek == Day)
+
+            if (ValidDate(nextDate))
                 count--;
 
             while (count > 0)
             {
                 nextDate = nextDate.AddDays(direction);
-                if (nextDate.DayOfWeek == Day)
+                if (ValidDate(nextDate))
                     count--;
             }
 
             return nextDate;
         }
-        private DateTime GetOccuranceDay(DateTime startOfPeriod)
+
+        private bool ValidDate(DateTime date)
         {
-            DateTime nextDate;
-            int count = 0;
-
-            if (Occurance == Occurance.Last)
-            {
-                nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, DateTime.DaysInMonth(startOfPeriod.Year, startOfPeriod.Month));
-            }
+            if (OccuranceType == OccuranceType.None)
+                return (date.Day == DayNumber);
+            else if (OccuranceType == OccuranceType.DayOfWeek)
+                return (date.DayOfWeek == Day);
+            else if (OccuranceType == OccuranceType.Day)
+                return true;
+            else if (OccuranceType == OccuranceType.Weekday)
+                return (date.DayOfWeek != DayOfWeek.Saturday) && (date.DayOfWeek != DayOfWeek.Sunday);
             else
-            {
-                if (Occurance == Occurance.First)
-                    count = 1;
-                else if (Occurance == Occurance.Second)
-                    count = 2;
-                else if (Occurance == Occurance.Third)
-                    count = 3;
-                else if (Occurance == Occurance.Fourth)
-                    count = 4;
-
-                nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, count);
-            }
-
-            return nextDate;
-        }
-        private DateTime GetOccuranceWeekDay(DateTime startOfPeriod)
-        {
-            DateTime nextDate;
-            int count = 0;
-            int direction;
-
-            if (Occurance == Occurance.Last)
-            {
-                nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, DateTime.DaysInMonth(startOfPeriod.Year, startOfPeriod.Month));
-                count = 1;
-                direction = -1;
-            }
-            else
-            {
-                nextDate = startOfPeriod;
-                direction = 1;
-
-                if (Occurance == Occurance.First)
-                    count = 1;
-                else if (Occurance == Occurance.Second)
-                    count = 2;
-                else if (Occurance == Occurance.Third)
-                    count = 3;
-                else if (Occurance == Occurance.Fourth)
-                    count = 4;
-            }
-
-            if ((nextDate.DayOfWeek != DayOfWeek.Saturday) && (nextDate.DayOfWeek != DayOfWeek.Sunday))
-                count--;
-
-            while (count > 0)
-            {
-                nextDate = nextDate.AddDays(direction);
-                if ((nextDate.DayOfWeek != DayOfWeek.Saturday) && (nextDate.DayOfWeek != DayOfWeek.Sunday))
-                    count--;
-            }
-
-            return nextDate;
+                return false;
         }
     }
 }
