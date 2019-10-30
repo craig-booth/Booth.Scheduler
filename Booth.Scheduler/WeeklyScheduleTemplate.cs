@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Booth.Scheduler
 {
-    public class WeeklyScheduleTemplate : DateScheduleTemplate
+    public class WeeklyScheduleTemplate : IDateScheduleTemplate
     {
         public int Every { get; set; }
         private bool[] _Days { get; } = new bool[7];
@@ -22,32 +22,40 @@ namespace Booth.Scheduler
             set { _Days[(int)dayOfWeek] = value; }
         }
 
-        protected override DateTime GetPeriodStart(DateTime date)
+        public IEnumerable<DateTime> GetDates(DateTime start)
         {
-            return date.AddDays(-(int)date.DayOfWeek);
-        }
+            var startDate = start.Date;
+            var startOfPeriod = startDate.AddDays(-(int)start.DayOfWeek);
 
-        protected override DateTime GetStartOfNextPeriod(DateTime startOfCurrentPeriod)
-        {
-            return startOfCurrentPeriod.AddDays(Every * 7);
-        }
-
-        protected override bool GetNextDateInPeriod(DateTime currentDate, bool firstTime, out DateTime nextDate)
-        {
-            nextDate = currentDate;
-
-            while (nextDate.DayOfWeek < DayOfWeek.Saturday)
+            // Get first date
+            var nextDate = startOfPeriod;
+            while (true)
             {
-                if (!firstTime)
+                if (this[nextDate.DayOfWeek] && nextDate >= startDate)
+                    break;
+
+                nextDate = nextDate.AddDays(1);
+                if (nextDate.DayOfWeek == DayOfWeek.Sunday)
+                    startOfPeriod = nextDate;
+            }
+            yield return nextDate;
+
+            // Get subsequent dates
+            while (true)
+            {
+                while (nextDate.DayOfWeek < DayOfWeek.Saturday)
+                {
                     nextDate = nextDate.AddDays(1);
-                else
-                    firstTime = false;
+
+                    if (this[nextDate.DayOfWeek])
+                        yield return nextDate;
+                }
+                startOfPeriod = startOfPeriod.AddDays(7 * Every);
+                nextDate = startOfPeriod;
 
                 if (this[nextDate.DayOfWeek])
-                    return true;
+                    yield return nextDate;
             }
-
-            return false;
         }
     }
 

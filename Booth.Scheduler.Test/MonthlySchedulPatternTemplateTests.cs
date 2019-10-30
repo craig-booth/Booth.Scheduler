@@ -139,10 +139,10 @@ namespace Booth.Scheduler.Test
 
             var expected = new DateTime[] {
                 new DateTime(2019, 11, 01),
-                new DateTime(2019, 12, 01),
-                new DateTime(2020, 01, 01),
                 new DateTime(2020, 02, 01),
-                new DateTime(2020, 03, 01)};
+                new DateTime(2020, 05, 01),
+                new DateTime(2020, 08, 01),
+                new DateTime(2020, 11, 01)};
 
             Assert.That(actual, Is.EqualTo(expected));
         }
@@ -160,10 +160,10 @@ namespace Booth.Scheduler.Test
 
             var expected = new DateTime[] {
                 new DateTime(2019, 10, 31),
-                new DateTime(2019, 11, 30),
-                new DateTime(2020, 11, 31),
-                new DateTime(2020, 01, 31),
-                new DateTime(2020, 02, 29)};
+                new DateTime(2019, 12, 31),
+                new DateTime(2020, 02, 29),
+                new DateTime(2020, 04, 30),
+                new DateTime(2020, 06, 30)};
 
             Assert.That(actual, Is.EqualTo(expected));
         }

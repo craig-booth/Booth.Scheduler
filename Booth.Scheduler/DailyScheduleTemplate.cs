@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Booth.Scheduler
 {
-    public class DailyScheduleTemplate : DateScheduleTemplate, IDateScheduleTemplate
+    public class DailyScheduleTemplate : IDateScheduleTemplate
     {
         public int Every { get; set; }
 
@@ -16,20 +16,15 @@ namespace Booth.Scheduler
             Every = every;
         }
 
-        protected override DateTime GetPeriodStart(DateTime date)
+        public IEnumerable<DateTime> GetDates(DateTime start)
         {
-            return date;
-        }
+            var nextDate = start.Date;
 
-        protected override DateTime GetStartOfNextPeriod(DateTime startOfCurrentPeriod)
-        {
-            return startOfCurrentPeriod.AddDays(Every);
-        }
-
-        protected override bool GetNextDateInPeriod(DateTime currentDate, bool firstTime, out DateTime nextDate)
-        {
-            nextDate = currentDate;
-            return firstTime;
+            while (true)
+            {
+                yield return nextDate;
+                nextDate = nextDate.AddDays(Every);
+            }
         }
     }
 }

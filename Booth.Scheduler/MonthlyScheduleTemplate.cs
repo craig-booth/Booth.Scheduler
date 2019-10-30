@@ -6,7 +6,7 @@ namespace Booth.Scheduler
 {
     public enum Occurance { First, Second, Third, Fourth, Last }
     public enum OccuranceType { None, DayOfWeek, Day, Weekday }
-    public class MonthlyScheduleTemplate : DateScheduleTemplate, IDateScheduleTemplate
+    public class MonthlyScheduleTemplate : IDateScheduleTemplate
     {
         public int Every { get; set; }
 
@@ -23,58 +23,72 @@ namespace Booth.Scheduler
             Every = every;
         }
 
-        protected override DateTime GetPeriodStart(DateTime date)
+        public IEnumerable<DateTime> GetDates(DateTime start)
         {
-            return new DateTime(date.Year, date.Month, 01);
-        }
+            var startDate = start.Date;
+            var startOfPeriod = new DateTime(startDate.Year, startDate.Month, 01);
 
-        protected override DateTime GetStartOfNextPeriod(DateTime startOfCurrentPeriod)
-        {
-            return startOfCurrentPeriod.AddMonths(Every);
-        }
-
-        protected override bool GetNextDateInPeriod(DateTime currentDate, bool firstTime, out DateTime nextDate)
-        {
-            if (OccuranceType == OccuranceType.None)
-                return GetNextDateInPeriodDayNumber(currentDate, firstTime, out nextDate);
-            else if (OccuranceType == OccuranceType.DayOfWeek)
-                return GetNextDateInPeriodDayOfWeekOccurance(currentDate, firstTime, out nextDate);
-            else if (OccuranceType == OccuranceType.Day)
-                return GetNextDateInPeriodDayOccurance(currentDate, firstTime, out nextDate);
-            else if (OccuranceType == OccuranceType.Weekday)
-                return GetNextDateInPeriodWeekdayOccurance(currentDate, firstTime, out nextDate);
-            else
+            // Get first date
+            DateTime nextDate;
+            while (true)
             {
-                nextDate = currentDate;
-                return true;
+                if (OccuranceType == OccuranceType.None)
+                    nextDate = GetDayNumber(startOfPeriod);
+                else if (OccuranceType == OccuranceType.DayOfWeek)
+                    nextDate = GetOccuranceDayOfWeek(startOfPeriod);
+                else if (OccuranceType == OccuranceType.Day)
+                    nextDate = GetOccuranceDay(startOfPeriod);
+                else if (OccuranceType == OccuranceType.Weekday)
+                    nextDate = GetOccuranceWeekDay(startOfPeriod);
+                else
+                    yield break;
+
+                if (nextDate >= startDate)
+                    break;
+
+                startOfPeriod = startOfPeriod.AddMonths(1);
             }
-                
+            yield return nextDate;
+
+            // Get subsequent dates
+            while (true)
+            {
+                startOfPeriod = startOfPeriod.AddMonths(Every);
+
+                if (OccuranceType == OccuranceType.None)
+                    nextDate = GetDayNumber(startOfPeriod);
+                else if (OccuranceType == OccuranceType.DayOfWeek)
+                    nextDate = GetOccuranceDayOfWeek(startOfPeriod);
+                else if (OccuranceType == OccuranceType.Day)
+                    nextDate = GetOccuranceDay(startOfPeriod);
+                else if (OccuranceType == OccuranceType.Weekday)
+                    nextDate = GetOccuranceWeekDay(startOfPeriod);
+                else
+                    yield break;
+
+                yield return nextDate;
+            }
         }
 
-        private bool GetNextDateInPeriodDayNumber(DateTime currentDate, bool firstTime, out DateTime nextDate)
+        private DateTime GetDayNumber(DateTime startOfPeriod)
         {
-            nextDate = new DateTime(currentDate.Year, currentDate.Month, DayNumber);
-            return firstTime;
+            return new DateTime(startOfPeriod.Year, startOfPeriod.Month, DayNumber);
         }
-
-        private bool GetNextDateInPeriodDayOccurance(DateTime currentDate, bool firstTime, out DateTime nextDate)
+        private DateTime GetOccuranceDayOfWeek(DateTime startOfPeriod)
         {
-            throw new NotSupportedException();
-        }
-        private bool GetNextDateInPeriodDayOfWeekOccurance(DateTime currentDate, bool firstTime, out DateTime nextDate)
-        {
+            DateTime nextDate;
             int count = 0;
             int direction;
 
             if (Occurance == Occurance.Last)
             {
-                nextDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, DateTime.DaysInMonth(startOfPeriod.Year, startOfPeriod.Month));
                 count = 1;
                 direction = -1;
             }
             else
             {
-                nextDate = new DateTime(currentDate.Year, currentDate.Month, 01);
+                nextDate = startOfPeriod;
                 direction = 1;
 
                 if (Occurance == Occurance.First)
@@ -97,28 +111,48 @@ namespace Booth.Scheduler
                     count--;
             }
 
-            if (firstTime && (nextDate >= currentDate))
-                return true;
-            else if (nextDate > currentDate)
-                return true;
-            else
-                return false;
+            return nextDate;
         }
-
-        private bool GetNextDateInPeriodWeekdayOccurance(DateTime currentDate, bool firstTime, out DateTime nextDate)
+        private DateTime GetOccuranceDay(DateTime startOfPeriod)
         {
+            DateTime nextDate;
+            int count = 0;
+
+            if (Occurance == Occurance.Last)
+            {
+                nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, DateTime.DaysInMonth(startOfPeriod.Year, startOfPeriod.Month));
+            }
+            else
+            {
+                if (Occurance == Occurance.First)
+                    count = 1;
+                else if (Occurance == Occurance.Second)
+                    count = 2;
+                else if (Occurance == Occurance.Third)
+                    count = 3;
+                else if (Occurance == Occurance.Fourth)
+                    count = 4;
+
+                nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, count);
+            }
+
+            return nextDate;
+        }
+        private DateTime GetOccuranceWeekDay(DateTime startOfPeriod)
+        {
+            DateTime nextDate;
             int count = 0;
             int direction;
 
             if (Occurance == Occurance.Last)
             {
-                nextDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+                nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, DateTime.DaysInMonth(startOfPeriod.Year, startOfPeriod.Month));
                 count = 1;
                 direction = -1;
             }
             else
             {
-                nextDate = new DateTime(currentDate.Year, currentDate.Month, 01);
+                nextDate = startOfPeriod;
                 direction = 1;
 
                 if (Occurance == Occurance.First)
@@ -131,22 +165,17 @@ namespace Booth.Scheduler
                     count = 4;
             }
 
-            if ((nextDate.DayOfWeek != DayOfWeek.Saturday) || (nextDate.DayOfWeek != DayOfWeek.Saturday))
+            if ((nextDate.DayOfWeek != DayOfWeek.Saturday) && (nextDate.DayOfWeek != DayOfWeek.Sunday))
                 count--;
 
             while (count > 0)
             {
                 nextDate = nextDate.AddDays(direction);
-                if ((nextDate.DayOfWeek != DayOfWeek.Saturday) || (nextDate.DayOfWeek != DayOfWeek.Saturday))
+                if ((nextDate.DayOfWeek != DayOfWeek.Saturday) && (nextDate.DayOfWeek != DayOfWeek.Sunday))
                     count--;
             }
 
-            if (firstTime && (nextDate >= currentDate))
-                return true;
-            else if (nextDate > currentDate)
-                return true;
-            else
-                return false;
+            return nextDate;
         }
     }
 }
