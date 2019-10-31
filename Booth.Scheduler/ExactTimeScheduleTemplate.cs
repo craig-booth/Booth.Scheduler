@@ -17,5 +17,10 @@ namespace Booth.Scheduler
         {
             yield return Time;
         }
+
+        public override string ToString()
+        {
+            return "at " + Time.ToString(@"h\:mm");
+        }
     }
 }

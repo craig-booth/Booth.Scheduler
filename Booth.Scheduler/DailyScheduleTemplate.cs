@@ -26,5 +26,13 @@ namespace Booth.Scheduler
                 nextDate = nextDate.AddDays(Every);
             }
         }
+        public override string ToString()
+        {
+            if (Every == 1)
+                return "every day";
+            else
+                return "every " + Every.ToString() + " days";
+
+        }
     }
 }

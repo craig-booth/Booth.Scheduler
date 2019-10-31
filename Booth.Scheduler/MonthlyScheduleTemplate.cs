@@ -104,5 +104,27 @@ namespace Booth.Scheduler
             else
                 return false;
         }
+
+        public override string ToString()
+        {
+            var text = "";
+
+            if (OccuranceType == OccuranceType.None)
+                text = "on the " + DayNumber.ToOrdinalString(); 
+            else if (OccuranceType == OccuranceType.DayOfWeek)
+                text = "on the " + Occurance.ToString().ToLower() + " " + Day.ToString();
+            else if (OccuranceType == OccuranceType.Day)
+                text = "on the " + Occurance.ToString().ToLower() + " day";
+            else if (OccuranceType == OccuranceType.Weekday)
+                text = "on the " + Occurance.ToString().ToLower() + " weekday";
+
+            if (Every == 1)
+                text += " of every month";
+            else
+                text += " of every " + Every.ToString() + " months";
+
+            return text;
+
+        }
     }
 }

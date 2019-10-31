@@ -20,5 +20,10 @@ namespace Booth.Scheduler
             DateTemplate = dateTemplate;
             TimeTemplate = new ExactTimeScheduleTemplate(0, 0);
         }
+
+        public override string ToString()
+        {
+            return "Run " + DateTemplate.ToString() + ", " + TimeTemplate.ToString();
+        }
     }
 }

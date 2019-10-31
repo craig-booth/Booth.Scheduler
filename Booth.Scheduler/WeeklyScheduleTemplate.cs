@@ -57,6 +57,21 @@ namespace Booth.Scheduler
                     yield return nextDate;
             }
         }
+
+        public override string ToString()
+        {           
+            var days = new List<string>();
+            foreach (var day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                if (_Days[(int)day])
+                    days.Add(day.ToString());
+            }
+
+            if (Every == 1)
+                return "every week on " + days.ToCommaList();
+            else
+                return "every " + Every.ToString() + " weeks on " + days.ToCommaList();
+        }
     }
 
 }
