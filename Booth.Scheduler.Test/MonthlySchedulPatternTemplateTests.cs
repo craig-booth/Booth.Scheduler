@@ -209,5 +209,28 @@ namespace Booth.Scheduler.Test
 
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        [TestCase]
+        public void ValidateEveryNotZero()
+        {
+            var template = new MonthlyScheduleTemplate(0);
+            template.OccuranceType = OccuranceType.DayOfWeek;
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("Monthly schedule must occur atleast every 1 months"));
+        }
+
+        [TestCase]
+        public void ValidateEveryNotLessThanZero()
+        {
+            var template = new MonthlyScheduleTemplate(-1);
+            template.OccuranceType = OccuranceType.DayOfWeek;
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("Monthly schedule must occur atleast every 1 months"));
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Booth.Scheduler
 {
@@ -56,6 +57,15 @@ namespace Booth.Scheduler
                 if (this[nextDate.DayOfWeek])
                     yield return nextDate;
             }
+        }
+
+        public IEnumerable<string> Validate()
+        {
+            if (Every < 1)
+                yield return "Weekly schedule must occur atleast every 1 weeks";
+
+            if (_Days.All(x => !x))
+                yield return "Weekly schedule must occur on atleast 1 day";
         }
 
         public override string ToString()

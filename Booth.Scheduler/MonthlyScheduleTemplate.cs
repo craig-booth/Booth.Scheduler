@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Booth.Scheduler
 {
@@ -103,6 +103,17 @@ namespace Booth.Scheduler
                 return (date.DayOfWeek != DayOfWeek.Saturday) && (date.DayOfWeek != DayOfWeek.Sunday);
             else
                 return false;
+        }
+        public IEnumerable<string> Validate()
+        {
+            if (Every < 1)
+                yield return "Monthly schedule must occur atleast every 1 months";
+
+            if (OccuranceType == OccuranceType.None)
+            {
+                if ((DayNumber < 1) || (DayNumber > 31))
+                    yield return "Day number must be between 1 and 31";
+            }
         }
 
         public override string ToString()

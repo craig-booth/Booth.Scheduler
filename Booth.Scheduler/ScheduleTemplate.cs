@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Booth.Scheduler
 {
@@ -19,6 +19,25 @@ namespace Booth.Scheduler
         {
             DateTemplate = dateTemplate;
             TimeTemplate = new ExactTimeScheduleTemplate(0, 0);
+        }
+
+        public IEnumerable<string> Validate()
+        {
+            if (DateTemplate != null)
+            {
+                foreach (var error in DateTemplate.Validate())
+                    yield return error;
+            }
+            else
+                yield return "Date Template not provided.";
+
+            if (TimeTemplate != null)
+            {
+                foreach (var error in TimeTemplate.Validate())
+                    yield return error;
+            }
+            else
+                yield return "Time Template not provided.";
         }
 
         public override string ToString()

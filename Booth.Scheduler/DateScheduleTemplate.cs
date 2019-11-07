@@ -5,8 +5,10 @@ using System.Text;
 
 namespace Booth.Scheduler
 {
-    public interface IDateScheduleTemplate
+    public interface IDateScheduleTemplate 
     {
         IEnumerable<DateTime> GetDates(DateTime start);
+
+        IEnumerable<string> Validate();
     }
 }

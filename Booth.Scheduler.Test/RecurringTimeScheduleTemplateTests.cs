@@ -167,5 +167,115 @@ namespace Booth.Scheduler.Test
             };
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        [TestCase]
+        public void ValidateEveryMinuteNotZero()
+        {
+            var template = new MinuteScheduleTemplate(0);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("Time must be less than 1 day"));
+        }
+
+        [TestCase]
+        public void ValidateEveryMinuteNotLessThanZero()
+        {
+            var template = new MinuteScheduleTemplate(-1);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("Time must be less than 1 day"));
+        }
+
+        [TestCase]
+        public void ValidateEveryHourNotZero()
+        {
+            var template = new HourlyScheduleTemplate(0);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("Time must be less than 1 day"));
+        }
+
+        [TestCase]
+        public void ValidateEveryHourNotLessThanZero()
+        {
+            var template = new HourlyScheduleTemplate(-1);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("Time must be less than 1 day"));
+        }
+
+        [TestCase]
+        public void ValidateFromTimeGreaterThanZero()
+        {
+            var template = new HourlyScheduleTemplate(1);
+            template.From(-1, 00);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("From time must be less than 1 day"));
+        }
+
+        [TestCase]
+        public void ValidateFromTimeLessThanOneDay()
+        {
+            var template = new HourlyScheduleTemplate(1);
+            template.From(26, 00);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(2));
+            Assert.That(errors[0], Is.EqualTo("From time must be less than 1 day"));
+            Assert.That(errors[1], Is.EqualTo("From time must be earlier than To Time"));
+        }
+
+        [TestCase]
+        public void ValidateToTimeGreaterThanZero()
+        {
+            var template = new HourlyScheduleTemplate(1);
+            template.To(-1, 00);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(2));
+            Assert.That(errors[0], Is.EqualTo("To time must be less than 1 day")); 
+            Assert.That(errors[1], Is.EqualTo("From time must be earlier than To Time"));
+        }
+
+        [TestCase]
+        public void ValidateToTimeLessThanOneDay()
+        {
+            var template = new HourlyScheduleTemplate(1);
+            template.To(26, 00);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("To time must be less than 1 day"));
+        }
+
+        [TestCase]
+        public void ValidateFromTimeNotEqualToTime()
+        {
+            var template = new HourlyScheduleTemplate(1);
+            template.From(9, 00);
+            template.To(9, 00);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("From time must be earlier than To Time"));
+        }
+
+        [TestCase]
+        public void ValidateFromTimeLessThanToTime()
+        {
+            var template = new HourlyScheduleTemplate(1);
+            template.From(17, 00);
+            template.To(9, 00);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("From time must be earlier than To Time"));
+        }
     }
 }

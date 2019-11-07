@@ -26,6 +26,13 @@ namespace Booth.Scheduler
                 nextDate = nextDate.AddDays(Every);
             }
         }
+
+        public IEnumerable<string> Validate()
+        {
+            if (Every < 1)
+                yield return "Daily schedule must occur atleast every 1 days";
+        }
+
         public override string ToString()
         {
             if (Every == 1)
