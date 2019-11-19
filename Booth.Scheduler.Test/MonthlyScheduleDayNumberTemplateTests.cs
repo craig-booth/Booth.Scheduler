@@ -103,5 +103,50 @@ namespace Booth.Scheduler.Test
 
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        [TestCase]
+        public void ValidateEveryNotZero()
+        {
+            var template = new MonthlyScheduleTemplate(0);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(2));
+            Assert.That(errors[0], Is.EqualTo("Monthly schedule must occur atleast every 1 months"));
+            Assert.That(errors[1], Is.EqualTo("Day number must be between 1 and 31"));
+        }
+
+        [TestCase]
+        public void ValidateEveryNotLessThanZero()
+        {
+            var template = new MonthlyScheduleTemplate(-1);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(2));
+            Assert.That(errors[0], Is.EqualTo("Monthly schedule must occur atleast every 1 months"));
+            Assert.That(errors[1], Is.EqualTo("Day number must be between 1 and 31"));
+        }
+
+        [TestCase]
+        public void ValidateDayNotLessThan1()
+        {
+            var template = new MonthlyScheduleTemplate(1);
+            template.DayNumber = 0;
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("Day number must be between 1 and 31"));
+        }
+
+        [TestCase]
+        public void ValidateDayNotGreateThan31()
+        {
+            var template = new MonthlyScheduleTemplate(1);
+            template.DayNumber = 32;
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("Day number must be between 1 and 31"));
+        }
+
     }
 }

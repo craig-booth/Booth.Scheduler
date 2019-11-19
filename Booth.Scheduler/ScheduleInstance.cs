@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Booth.Scheduler
 {
@@ -18,6 +18,12 @@ namespace Booth.Scheduler
 
         public IEnumerator<DateTime> GetEnumerator()
         {
+            var errors = _Template.Validate();
+            if (errors.Any())
+            {
+                throw new Exception(errors.First());
+            }
+
             var dates = _Template.DateTemplate.GetDates(_Start);
             var times = _Template.TimeTemplate.GetTimes();
 

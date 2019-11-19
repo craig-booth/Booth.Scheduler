@@ -180,5 +180,6 @@ namespace Booth.Scheduler.Test
 
             Assert.That(schedule.ToString(), Is.EqualTo("Run on the last weekday of every 2 months, every hour between 9:00 and 17:00"));
         }
+
     }
 }

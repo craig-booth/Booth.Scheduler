@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Booth.Scheduler
 {
@@ -8,8 +9,8 @@ namespace Booth.Scheduler
     {
         public int Every { get; set; }
 
-        public TimeSpan FromTime { get; private set; }
-        public TimeSpan ToTime { get; private set; }
+        public TimeSpan FromTime { get; set; }
+        public TimeSpan ToTime { get; set; }
         internal abstract TimeSpan TimeIncrement { get; set; }
 
         public RecurringTimeScheduleTemplate() : this(1) { }
@@ -39,6 +40,21 @@ namespace Booth.Scheduler
                 yield return nextTime;
                 nextTime = nextTime.Add(TimeIncrement);
             }
+        }
+
+        public IEnumerable<string> Validate()
+        {
+            if ((TimeIncrement.TotalMinutes < 1) || (TimeIncrement.Days >= 1))
+                yield return "Time must be less than 1 day";
+
+            if ((FromTime.Ticks < 0) || (FromTime.Days >= 1))
+                yield return "From time must be less than 1 day";
+
+            if ((ToTime.Ticks < 0) || (ToTime.Days >= 1))
+                yield return "To time must be less than 1 day";
+
+            if (FromTime >= ToTime)
+                yield return "From time must be earlier than To Time";
         }
     }
 }

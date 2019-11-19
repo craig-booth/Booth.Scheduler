@@ -149,5 +149,37 @@ namespace Booth.Scheduler.Test
 
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        [TestCase]
+        public void ValidateEveryNotZero()
+        {
+            var template = new WeeklyScheduleTemplate(0);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(2));
+            Assert.That(errors[0], Is.EqualTo("Weekly schedule must occur atleast every 1 weeks"));
+            Assert.That(errors[1], Is.EqualTo("Weekly schedule must occur on atleast 1 day"));
+        }
+
+        [TestCase]
+        public void ValidateEveryNotLessThanZero()
+        {
+            var template = new WeeklyScheduleTemplate(-1);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(2));
+            Assert.That(errors[0], Is.EqualTo("Weekly schedule must occur atleast every 1 weeks"));
+            Assert.That(errors[1], Is.EqualTo("Weekly schedule must occur on atleast 1 day"));
+        }
+
+        [TestCase]
+        public void ValidateAtLeastOneDaySelected()
+        {
+            var template = new WeeklyScheduleTemplate(1);
+
+            var errors = template.Validate().ToList();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Is.EqualTo("Weekly schedule must occur on atleast 1 day"));
+        }
     }
 }

@@ -18,6 +18,12 @@ namespace Booth.Scheduler
             yield return Time;
         }
 
+        public IEnumerable<string> Validate()
+        {
+            if ((Time.Ticks < 0) || (Time.Days >= 1))
+                yield return "Time must be less than 1 day";
+        }
+
         public override string ToString()
         {
             return "at " + Time.ToString(@"h\:mm");
