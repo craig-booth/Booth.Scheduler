@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Booth.Scheduler", "Booth.Sc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Booth.Scheduler.Examples", "Booth.Scheduler.Examples\Booth.Scheduler.Examples.csproj", "{6E42296B-59CF-47BB-B75D-68467E08B50B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booth.Scheduler.Test", "Booth.Scheduler.Test\Booth.Scheduler.Test.csproj", "{6EE61010-258B-4409-8ECB-9774F9B4AC8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Booth.Scheduler.Test", "Booth.Scheduler.Test\Booth.Scheduler.Test.csproj", "{6EE61010-258B-4409-8ECB-9774F9B4AC8C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B37ED358-B2FE-404A-8B70-B03CBB618669}"
+	ProjectSection(SolutionItems) = preProject
+		Jenkinsfile = Jenkinsfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
