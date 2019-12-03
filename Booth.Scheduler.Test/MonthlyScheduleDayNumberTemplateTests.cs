@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 
+using Booth.Common;
+
 using NUnit.Framework;
 
 namespace Booth.Scheduler.Test
@@ -13,11 +15,11 @@ namespace Booth.Scheduler.Test
             var template = new MonthlyScheduleTemplate(1);
             template.DayNumber = 26;
 
-            var startDate = new DateTime(2019, 10, 26, 04, 34, 56);
+            var startDate = new Date(2019, 10, 26);
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(startDate.Date));
+            Assert.That(actual, Is.EqualTo(startDate));
         }
 
         [TestCase]
@@ -26,11 +28,11 @@ namespace Booth.Scheduler.Test
             var template = new MonthlyScheduleTemplate(1);
             template.DayNumber = 26;
 
-            var startDate = new DateTime(2019, 10, 28, 04, 34, 56);
+            var startDate = new Date(2019, 10, 28);
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(new DateTime(2019, 11, 26)));
+            Assert.That(actual, Is.EqualTo(new Date(2019, 11, 26)));
         }
 
         [TestCase]
@@ -39,11 +41,11 @@ namespace Booth.Scheduler.Test
             var template = new MonthlyScheduleTemplate(1);
             template.DayNumber = 26;
 
-            var startDate = new DateTime(2019, 10, 02, 04, 34, 56);
+            var startDate = new Date(2019, 10, 02);
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 26)));
+            Assert.That(actual, Is.EqualTo(new Date(2019, 10, 26)));
         }
 
         [TestCase]
@@ -52,16 +54,16 @@ namespace Booth.Scheduler.Test
             var template = new MonthlyScheduleTemplate(1);
             template.DayNumber = 15;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
-                new DateTime(2019, 11, 15),
-                new DateTime(2019, 12, 15),
-                new DateTime(2020, 01, 15),
-                new DateTime(2020, 02, 15),
-                new DateTime(2020, 03, 15)};
+            var expected = new Date[] {
+                new Date(2019, 11, 15),
+                new Date(2019, 12, 15),
+                new Date(2020, 01, 15),
+                new Date(2020, 02, 15),
+                new Date(2020, 03, 15)};
 
             Assert.That(actual, Is.EqualTo(expected));
         }
@@ -71,16 +73,16 @@ namespace Booth.Scheduler.Test
             var template = new MonthlyScheduleTemplate(6);
             template.DayNumber = 10;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
-                new DateTime(2019, 11, 10),
-                new DateTime(2020, 05, 10),
-                new DateTime(2020, 11, 10),
-                new DateTime(2021, 05, 10),
-                new DateTime(2021, 11, 10)};
+            var expected = new Date[] {
+                new Date(2019, 11, 10),
+                new Date(2020, 05, 10),
+                new Date(2020, 11, 10),
+                new Date(2021, 05, 10),
+                new Date(2021, 11, 10)};
 
             Assert.That(actual, Is.EqualTo(expected));
         }
@@ -90,16 +92,16 @@ namespace Booth.Scheduler.Test
             var template = new MonthlyScheduleTemplate(6);
             template.DayNumber = 31;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(12);
 
-            var expected = new DateTime[] {
-                new DateTime(2019, 10, 30),
-                new DateTime(2019, 11, 30),
-                new DateTime(2019, 12, 30),
-                new DateTime(2019, 01, 30),
-                new DateTime(2019, 02, 29)};
+            var expected = new Date[] {
+                new Date(2019, 10, 30),
+                new Date(2019, 11, 30),
+                new Date(2019, 12, 30),
+                new Date(2019, 01, 30),
+                new Date(2019, 02, 29)};
 
             Assert.That(actual, Is.EqualTo(expected));
         }

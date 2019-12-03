@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Booth.Common;
+
 namespace Booth.Scheduler
 {
     public enum Occurance { First, Second, Third, Fourth, Last }
@@ -23,17 +25,17 @@ namespace Booth.Scheduler
             Every = every;
         }
 
-        public IEnumerable<DateTime> GetDates(DateTime start)
+        public IEnumerable<Date> GetDates(Date start)
         {
-            DateTime nextDate;
-            var startDate = start.Date;
-            var startOfPeriod = new DateTime(startDate.Year, startDate.Month, 01);
+            Date nextDate;
+            var startDate = start;
+            var startOfPeriod = new Date(startDate.Year, startDate.Month, 01);
 
             // Get first date     
             while (true)
             {
                 if (OccuranceType == OccuranceType.None)
-                    nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, DayNumber);
+                    nextDate = new Date(startOfPeriod.Year, startOfPeriod.Month, DayNumber);
                 else
                     nextDate = GetOccurance(startOfPeriod);
 
@@ -50,7 +52,7 @@ namespace Booth.Scheduler
                 startOfPeriod = startOfPeriod.AddMonths(Every);
 
                 if (OccuranceType == OccuranceType.None)
-                    nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, DayNumber);
+                    nextDate = new Date(startOfPeriod.Year, startOfPeriod.Month, DayNumber);
                 else 
                     nextDate = GetOccurance(startOfPeriod);
 
@@ -58,15 +60,15 @@ namespace Booth.Scheduler
             }
         }
 
-        private DateTime GetOccurance(DateTime startOfPeriod)
+        private Date GetOccurance(Date startOfPeriod)
         {
-            DateTime nextDate;
+            Date nextDate;
             int direction;
             int count;
 
             if (Occurance == Occurance.Last)
             {
-                nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, DateTime.DaysInMonth(startOfPeriod.Year, startOfPeriod.Month));
+                nextDate = new Date(startOfPeriod.Year, startOfPeriod.Month, DateTime.DaysInMonth(startOfPeriod.Year, startOfPeriod.Month));
                 count = 1;
                 direction = -1;
             }
@@ -91,7 +93,7 @@ namespace Booth.Scheduler
             return nextDate;
         }
 
-        private bool ValidDate(DateTime date)
+        private bool ValidDate(Date date)
         {
             if (OccuranceType == OccuranceType.None)
                 return (date.Day == DayNumber);

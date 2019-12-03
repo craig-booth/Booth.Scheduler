@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 
+using Booth.Common;
+
 using NUnit.Framework;
 
 namespace Booth.Scheduler.Test
@@ -13,11 +15,11 @@ namespace Booth.Scheduler.Test
         {
             var template = new DailyScheduleTemplate();
 
-            var startDate = new DateTime(2000, 01, 01, 04, 34, 56);
+            var startDate = new Date(2000, 01, 01);
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(startDate.Date));
+            Assert.That(actual, Is.EqualTo(startDate));
         }
 
         [TestCase]
@@ -25,16 +27,16 @@ namespace Booth.Scheduler.Test
         {
             var template = new DailyScheduleTemplate();
 
-            var startDate = new DateTime(2000, 02, 26, 04, 34, 56);
+            var startDate = new Date(2000, 02, 26);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
-                new DateTime(2000, 02, 26),
-                new DateTime(2000, 02, 27),
-                new DateTime(2000, 02, 28),
-                new DateTime(2000, 02, 29),
-                new DateTime(2000, 03, 01)};
+            var expected = new Date[] {
+                new Date(2000, 02, 26),
+                new Date(2000, 02, 27),
+                new Date(2000, 02, 28),
+                new Date(2000, 02, 29),
+                new Date(2000, 03, 01)};
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -43,16 +45,16 @@ namespace Booth.Scheduler.Test
         {
             var template = new DailyScheduleTemplate(3);
 
-            var startDate = new DateTime(2000, 02, 26, 04, 34, 56);
+            var startDate = new Date(2000, 02, 26);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
-                new DateTime(2000, 02, 26),
-                new DateTime(2000, 02, 29),
-                new DateTime(2000, 03, 03),
-                new DateTime(2000, 03, 06),
-                new DateTime(2000, 03, 09)};
+            var expected = new Date[] {
+                new Date(2000, 02, 26),
+                new Date(2000, 02, 29),
+                new Date(2000, 03, 03),
+                new Date(2000, 03, 06),
+                new Date(2000, 03, 09)};
             Assert.That(actual, Is.EqualTo(expected));
         }
 

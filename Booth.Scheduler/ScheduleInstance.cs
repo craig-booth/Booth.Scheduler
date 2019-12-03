@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+using Booth.Common;
+
 namespace Booth.Scheduler
 {
     public class ScheduleInstance : IEnumerable<DateTime>
@@ -24,14 +26,14 @@ namespace Booth.Scheduler
                 throw new Exception(errors.First());
             }
 
-            var dates = _Template.DateTemplate.GetDates(_Start);
+            var dates = _Template.DateTemplate.GetDates(new Date(_Start));
             var times = _Template.TimeTemplate.GetTimes();
 
             foreach (var date in dates)
             {
                 foreach (var time in times)
                 {
-                    yield return date.Add(time);
+                    yield return date.DateTime.Add(time.TimeSpan);
                 }
             }
         }

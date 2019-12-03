@@ -7,12 +7,16 @@
     <Description>Scheduler for running tasks using a recurring pattern</Description>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <PackageIcon>Booth.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="Booth.png" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Booth.Common" Version="1.0.4" />
   </ItemGroup>
 
 </Project>

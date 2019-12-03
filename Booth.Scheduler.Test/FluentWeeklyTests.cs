@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 
+using Booth.Common;
+
 using NUnit.Framework;
 
 using Booth.Scheduler.Fluent;
@@ -28,7 +30,7 @@ namespace Booth.Scheduler.Test
 
             var timeTemplate = schedule.TimeTemplate;
             Assert.That(timeTemplate, Is.AssignableTo(typeof(ExactTimeScheduleTemplate)));
-            Assert.That(((ExactTimeScheduleTemplate)timeTemplate).Time, Is.EqualTo(new TimeSpan(14, 00, 00)));
+            Assert.That(((ExactTimeScheduleTemplate)timeTemplate).Time, Is.EqualTo(new Time(14, 00, 00)));
 
             Assert.That(schedule.ToString(), Is.EqualTo("Run every week on Monday, at 14:00"));
         }
@@ -51,7 +53,7 @@ namespace Booth.Scheduler.Test
 
             var timeTemplate = schedule.TimeTemplate;
             Assert.That(timeTemplate, Is.AssignableTo(typeof(ExactTimeScheduleTemplate)));
-            Assert.That(((ExactTimeScheduleTemplate)timeTemplate).Time, Is.EqualTo(new TimeSpan(14, 00, 00)));
+            Assert.That(((ExactTimeScheduleTemplate)timeTemplate).Time, Is.EqualTo(new Time(14, 00, 00)));
 
             Assert.That(schedule.ToString(), Is.EqualTo("Run every week on Monday, Tuesday, Wednesday, Thursday and Friday, at 14:00"));
         }
@@ -75,8 +77,8 @@ namespace Booth.Scheduler.Test
             var timeTemplate = schedule.TimeTemplate;
             Assert.That(timeTemplate, Is.AssignableTo(typeof(HourlyScheduleTemplate)));
             Assert.That(((HourlyScheduleTemplate)timeTemplate).Every, Is.EqualTo(2));
-            Assert.That(((HourlyScheduleTemplate)timeTemplate).FromTime, Is.EqualTo(new TimeSpan(09, 00, 00)));
-            Assert.That(((HourlyScheduleTemplate)timeTemplate).ToTime, Is.EqualTo(new TimeSpan(17, 00, 00)));
+            Assert.That(((HourlyScheduleTemplate)timeTemplate).FromTime, Is.EqualTo(new Time(09, 00, 00)));
+            Assert.That(((HourlyScheduleTemplate)timeTemplate).ToTime, Is.EqualTo(new Time(17, 00, 00)));
 
             Assert.That(schedule.ToString(), Is.EqualTo("Run every week on Monday, Tuesday, Wednesday, Thursday and Friday, every 2 hours between 9:00 and 17:00"));
         }
@@ -100,7 +102,7 @@ namespace Booth.Scheduler.Test
 
             var timeTemplate = schedule.TimeTemplate;
             Assert.That(timeTemplate, Is.AssignableTo(typeof(ExactTimeScheduleTemplate)));
-            Assert.That(((ExactTimeScheduleTemplate)timeTemplate).Time, Is.EqualTo(new TimeSpan(07, 00, 00)));
+            Assert.That(((ExactTimeScheduleTemplate)timeTemplate).Time, Is.EqualTo(new Time(07, 00, 00)));
 
             Assert.That(schedule.ToString(), Is.EqualTo("Run every 2 weeks on Tuesday, Wednesday and Thursday, at 7:00"));
         }
