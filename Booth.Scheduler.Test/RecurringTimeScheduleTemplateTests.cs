@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Linq;
 
-using NUnit.Framework;
-
+using Xunit;
+using FluentAssertions;
 
 namespace Booth.Scheduler.Test
 {
-    class RecurringTimeScheduleTemplateTests
+    public class RecurringTimeScheduleTemplateTests
     {
-        [TestCase]
+        [Fact]
         public void HourlyWithNoStartEndTime()
         {
             var template = new HourlyScheduleTemplate(1);
 
             var actual = template.GetTimes();
 
-            var expected = new TimeSpan[]
-            {
+            actual.Should().Equal(new TimeSpan[] {
                 new TimeSpan(00, 00, 00),
                 new TimeSpan(01, 00, 00),
                 new TimeSpan(02, 00, 00),
@@ -41,11 +40,10 @@ namespace Booth.Scheduler.Test
                 new TimeSpan(21, 00, 00),
                 new TimeSpan(22, 00, 00),
                 new TimeSpan(23, 00, 00)
-            };
-            Assert.That(actual, Is.EqualTo(expected));
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void HourlyWithExactStartAndEndTimes()
         {
             var template = new HourlyScheduleTemplate();
@@ -54,8 +52,7 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetTimes();
 
-            var expected = new TimeSpan[]
-            {
+            actual.Should().Equal(new TimeSpan[] {
                 new TimeSpan(09, 00, 00),
                 new TimeSpan(10, 00, 00),
                 new TimeSpan(11, 00, 00),
@@ -65,12 +62,10 @@ namespace Booth.Scheduler.Test
                 new TimeSpan(15, 00, 00),
                 new TimeSpan(16, 00, 00),
                 new TimeSpan(17, 00, 00)
-            };
-
-            Assert.That(actual, Is.EqualTo(expected));
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void TwiceHourlyWithDifferentStartAndEndTimes()
         {
             var template = new HourlyScheduleTemplate(2);
@@ -79,33 +74,29 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetTimes();
 
-            var expected = new TimeSpan[]
-            {
+            actual.Should().Equal(new TimeSpan[] {
                 new TimeSpan(09, 05, 00),
                 new TimeSpan(11, 05, 00),
                 new TimeSpan(13, 05, 00),
                 new TimeSpan(15, 05, 00),
                 new TimeSpan(17, 05, 00)
-            };
-            Assert.That(actual, Is.EqualTo(expected));
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void Every15Hours()
         {
             var template = new HourlyScheduleTemplate(15);
 
             var actual = template.GetTimes();
 
-            var expected = new TimeSpan[]
-            {
+            actual.Should().Equal(new TimeSpan[] {
                 new TimeSpan(00, 00, 00),
                 new TimeSpan(15, 00, 00)
-            };
-            Assert.That(actual, Is.EqualTo(expected));
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void RecurranceGreaterThanOneDay()
         {
             var template = new HourlyScheduleTemplate(25);
@@ -114,22 +105,19 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetTimes();
 
-            var expected = new TimeSpan[]
-            {
+            actual.Should().Equal(new TimeSpan[] {
                 new TimeSpan(11, 00, 00)
-            };
-            Assert.That(actual, Is.EqualTo(expected));
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void Every150MinutesWithNoStartAndEndTime()
         {
             var template = new MinuteScheduleTemplate(150);
 
             var actual = template.GetTimes();
 
-            var expected = new TimeSpan[]
-            {
+            actual.Should().Equal(new TimeSpan[] {
                 new TimeSpan(00, 00, 00),
                 new TimeSpan(02, 30, 00),
                 new TimeSpan(05, 00, 00),
@@ -140,11 +128,10 @@ namespace Booth.Scheduler.Test
                 new TimeSpan(17, 30, 00),
                 new TimeSpan(20, 00, 00),
                 new TimeSpan(22, 30, 00),
-            };
-            Assert.That(actual, Is.EqualTo(expected));
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void Every15MinutesBetween10And12()
         {
             var template = new MinuteScheduleTemplate(15);
@@ -153,8 +140,7 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetTimes();
 
-            var expected = new TimeSpan[]
-            {
+            actual.Should().Equal(new TimeSpan[] {
                 new TimeSpan(10, 00, 00),
                 new TimeSpan(10, 15, 00),
                 new TimeSpan(10, 30, 00),
@@ -164,118 +150,118 @@ namespace Booth.Scheduler.Test
                 new TimeSpan(11, 30, 00),
                 new TimeSpan(11, 45, 00),
                 new TimeSpan(12, 00, 00)
-            };
-            Assert.That(actual, Is.EqualTo(expected));
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateEveryMinuteNotZero()
         {
             var template = new MinuteScheduleTemplate(0);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("Time must be less than 1 day"));
+            var errors = template.Validate();
+            errors.Should().Equal(new string[] { "Time must be less than 1 day" });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateEveryMinuteNotLessThanZero()
         {
             var template = new MinuteScheduleTemplate(-1);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("Time must be less than 1 day"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] { "Time must be less than 1 day" });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateEveryHourNotZero()
         {
             var template = new HourlyScheduleTemplate(0);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("Time must be less than 1 day"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] { "Time must be less than 1 day" });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateEveryHourNotLessThanZero()
         {
             var template = new HourlyScheduleTemplate(-1);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("Time must be less than 1 day"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] { "Time must be less than 1 day" });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateFromTimeGreaterThanZero()
         {
             var template = new HourlyScheduleTemplate(1);
             template.From(-1, 00);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("From time must be less than 1 day"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] { "From time must be less than 1 day" });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateFromTimeLessThanOneDay()
         {
             var template = new HourlyScheduleTemplate(1);
             template.From(26, 00);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(2));
-            Assert.That(errors[0], Is.EqualTo("From time must be less than 1 day"));
-            Assert.That(errors[1], Is.EqualTo("From time must be earlier than To Time"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] {
+                "From time must be less than 1 day",
+                "From time must be earlier than To Time"});
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateToTimeGreaterThanZero()
         {
             var template = new HourlyScheduleTemplate(1);
             template.To(-1, 00);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(2));
-            Assert.That(errors[0], Is.EqualTo("To time must be less than 1 day")); 
-            Assert.That(errors[1], Is.EqualTo("From time must be earlier than To Time"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] {
+                "To time must be less than 1 day",
+                "From time must be earlier than To Time"});
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateToTimeLessThanOneDay()
         {
             var template = new HourlyScheduleTemplate(1);
             template.To(26, 00);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("To time must be less than 1 day"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] { "To time must be less than 1 day" });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateFromTimeNotEqualToTime()
         {
             var template = new HourlyScheduleTemplate(1);
             template.From(9, 00);
             template.To(9, 00);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("From time must be earlier than To Time"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] { "From time must be earlier than To Time" });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateFromTimeLessThanToTime()
         {
             var template = new HourlyScheduleTemplate(1);
             template.From(17, 00);
             template.To(9, 00);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("From time must be earlier than To Time"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] { "From time must be earlier than To Time" });
         }
     }
 }

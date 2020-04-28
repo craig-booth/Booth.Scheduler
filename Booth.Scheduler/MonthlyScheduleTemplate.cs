@@ -50,8 +50,11 @@ namespace Booth.Scheduler
                 startOfPeriod = startOfPeriod.AddMonths(Every);
 
                 if (OccuranceType == OccuranceType.None)
-                    nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, DayNumber);
-                else 
+                {
+                    var daysInMonth = DateTime.DaysInMonth(startOfPeriod.Year, startOfPeriod.Month);
+                    nextDate = new DateTime(startOfPeriod.Year, startOfPeriod.Month, Math.Min(DayNumber, daysInMonth));
+                }
+                else
                     nextDate = GetOccurance(startOfPeriod);
 
                 yield return nextDate;

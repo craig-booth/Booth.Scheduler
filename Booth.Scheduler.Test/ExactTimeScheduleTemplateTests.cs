@@ -1,45 +1,42 @@
 ﻿using System;
 using System.Linq;
 
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 
 namespace Booth.Scheduler.Test
 {
-    class ExactTimeScheduleTemplateTests
+    public class ExactTimeScheduleTemplateTests
     {
 
-        [TestCase]
+        [Fact]
         public void OnlyRunTime()
         {
             var template = new ExactTimeScheduleTemplate(13, 32);
 
             var actual = template.GetTimes();
 
-            var expected = new TimeSpan[] {
-                new TimeSpan(13, 32, 00)
-            };
-
-            Assert.That(actual, Is.EqualTo(expected));
+            actual.Should().Equal(new TimeSpan[] { new TimeSpan(13, 32, 00) });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateTimePositive()
         {
             var template = new ExactTimeScheduleTemplate(-1, 00);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("Time must be less than 1 day"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] { "Time must be less than 1 day" });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateTimeLessThanOneDay()
         {
             var template = new ExactTimeScheduleTemplate(26, 80);
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("Time must be less than 1 day"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] { "Time must be less than 1 day" });
         }
 
     }

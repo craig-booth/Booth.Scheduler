@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 
 namespace Booth.Scheduler.Test
 {
-    class ScheduleInstanceTests
+    public class ScheduleInstanceTests
     {
-        [TestCase]
+        [Fact]
         public void DailyAt14_30()
         {
             var dateTemplate = new DailyScheduleTemplate();
@@ -18,18 +19,16 @@ namespace Booth.Scheduler.Test
 
             var schedule = new ScheduleInstance(template, startDate);
 
-            var expected = new DateTime[] {
-                new DateTime(2019, 10, 23, 14, 30, 00), 
+            schedule.Take(5).Should().Equal(new DateTime[] {
+                new DateTime(2019, 10, 23, 14, 30, 00),
                 new DateTime(2019, 10, 24, 14, 30, 00),
                 new DateTime(2019, 10, 25, 14, 30, 00),
                 new DateTime(2019, 10, 26, 14, 30, 00),
                 new DateTime(2019, 10, 27, 14, 30, 00)
-            };
-
-            Assert.That(schedule.Take(5), Is.EqualTo(expected));
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void DailyEvery3HoursFrom9To19()
         {
             var dateTemplate = new DailyScheduleTemplate();
@@ -42,7 +41,7 @@ namespace Booth.Scheduler.Test
 
             var schedule = new ScheduleInstance(template, startDate);
 
-            var expected = new DateTime[] {
+            schedule.Take(8).Should().Equal(new DateTime[] {
                 new DateTime(2019, 10, 23, 09, 00, 00),
                 new DateTime(2019, 10, 23, 12, 00, 00),
                 new DateTime(2019, 10, 23, 15, 00, 00),
@@ -51,12 +50,10 @@ namespace Booth.Scheduler.Test
                 new DateTime(2019, 10, 24, 12, 00, 00),
                 new DateTime(2019, 10, 24, 15, 00, 00),
                 new DateTime(2019, 10, 24, 18, 00, 00)
-            };
-
-            Assert.That(schedule.Take(8), Is.EqualTo(expected));
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void WeeklyEveryMondayAt17_30()
         {
             var dateTemplate = new WeeklyScheduleTemplate(1);
@@ -69,15 +66,13 @@ namespace Booth.Scheduler.Test
 
             var schedule = new ScheduleInstance(template, startDate);
 
-            var expected = new DateTime[] {
+            schedule.Take(5).Should().Equal(new DateTime[] {
                 new DateTime(2019, 10, 28, 17, 30, 00),
                 new DateTime(2019, 11, 04, 17, 30, 00),
                 new DateTime(2019, 11, 11, 17, 30, 00),
                 new DateTime(2019, 11, 18, 17, 30, 00),
                 new DateTime(2019, 11, 25, 17, 30, 00)
-            };
-
-            Assert.That(schedule.Take(5), Is.EqualTo(expected));
+            });
         }
 
     }

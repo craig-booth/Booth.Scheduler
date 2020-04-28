@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 
 namespace Booth.Scheduler.Test
 {
-    class WeeklyScheduleTemplateTests
+    public class WeeklyScheduleTemplateTests
     {
-        [TestCase]
+        [Fact]
         public void FirstRunDateOnCorrectDay()
         {         
             var template = new WeeklyScheduleTemplate(1);
@@ -17,10 +18,10 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(startDate.Date));
+            actual.Should().Be(startDate.Date);
         }
 
-        [TestCase]
+        [Fact]
         public void FirstRunDateBeforeDate()
         {
             var template = new WeeklyScheduleTemplate(1);
@@ -30,10 +31,10 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 23)));
+            actual.Should().Be(new DateTime(2019, 10, 23));
         }
 
-        [TestCase]
+        [Fact]
         public void FirstRunDateAfterDate()
         {
             var template = new WeeklyScheduleTemplate(1);
@@ -43,10 +44,10 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 30)));
+            actual.Should().Be(new DateTime(2019, 10, 30));
         }
 
-        [TestCase]
+        [Fact]
         public void FirstRunDateBetweenDates()
         {
             var template = new WeeklyScheduleTemplate(1);
@@ -57,10 +58,10 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 26)));
+            actual.Should().Be(new DateTime(2019, 10, 26));
         }
 
-        [TestCase]
+        [Fact]
         public void RunEveryWeekOnMonday()
         {
             var template = new WeeklyScheduleTemplate(1);
@@ -70,17 +71,16 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2019, 10, 28),
                 new DateTime(2019, 11, 04),
                 new DateTime(2019, 11, 11),
                 new DateTime(2019, 11, 18),
-                new DateTime(2019, 11, 25)};
-
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2019, 11, 25)
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void RunEvery2WeeksOnMonday()
         {
             var template = new WeeklyScheduleTemplate(2);
@@ -90,17 +90,16 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2019, 10, 28),
                 new DateTime(2019, 11, 11),
                 new DateTime(2019, 11, 25),
                 new DateTime(2019, 12, 09),
-                new DateTime(2019, 12, 23)};
-
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2019, 12, 23)
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void RunEveryWeekOnWednesdayAndSunday()
         {
             var template = new WeeklyScheduleTemplate(1);
@@ -111,17 +110,16 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2019, 10, 27),
                 new DateTime(2019, 10, 30),
                 new DateTime(2019, 11, 03),
                 new DateTime(2019, 11, 06),
-                new DateTime(2019, 11, 10)};
-
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2019, 11, 10)
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void RunEveryFourWeeksOnWeekdays()
         {
             var template = new WeeklyScheduleTemplate(4);
@@ -135,7 +133,7 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(10);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2019, 10, 24),
                 new DateTime(2019, 10, 25),
                 new DateTime(2019, 11, 18),
@@ -145,41 +143,42 @@ namespace Booth.Scheduler.Test
                 new DateTime(2019, 11, 22),
                 new DateTime(2019, 12, 16),
                 new DateTime(2019, 12, 17),
-                new DateTime(2019, 12, 18)};
-
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2019, 12, 18)
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateEveryNotZero()
         {
             var template = new WeeklyScheduleTemplate(0);
 
             var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(2));
-            Assert.That(errors[0], Is.EqualTo("Weekly schedule must occur atleast every 1 weeks"));
-            Assert.That(errors[1], Is.EqualTo("Weekly schedule must occur on atleast 1 day"));
+
+            errors.Should().BeEquivalentTo(new string[] {
+                "Weekly schedule must occur atleast every 1 weeks",
+                "Weekly schedule must occur on atleast 1 day"});
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateEveryNotLessThanZero()
         {
             var template = new WeeklyScheduleTemplate(-1);
 
             var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(2));
-            Assert.That(errors[0], Is.EqualTo("Weekly schedule must occur atleast every 1 weeks"));
-            Assert.That(errors[1], Is.EqualTo("Weekly schedule must occur on atleast 1 day"));
+
+            errors.Should().BeEquivalentTo(new string[] {
+                "Weekly schedule must occur atleast every 1 weeks",
+                "Weekly schedule must occur on atleast 1 day"});
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateAtLeastOneDaySelected()
         {
             var template = new WeeklyScheduleTemplate(1);
 
             var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("Weekly schedule must occur on atleast 1 day"));
+
+            errors.Should().BeEquivalentTo(new string[] { "Weekly schedule must occur on atleast 1 day" });
         }
     }
 }

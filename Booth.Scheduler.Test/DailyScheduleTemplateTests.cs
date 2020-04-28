@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Linq;
 
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 
 namespace Booth.Scheduler.Test
 {
-    class DailyScheduleTemplateTests
+    public class DailyScheduleTemplateTests
     {
 
-        [TestCase]
+        [Fact]
         public void FirstRunDate()
         {
             var template = new DailyScheduleTemplate();
@@ -17,10 +18,10 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(startDate.Date));
+            actual.Should().Be(startDate.Date);
         }
 
-        [TestCase]
+        [Fact]
         public void RunDateSequenceForEveryDay()
         {
             var template = new DailyScheduleTemplate();
@@ -29,16 +30,15 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2000, 02, 26),
                 new DateTime(2000, 02, 27),
                 new DateTime(2000, 02, 28),
                 new DateTime(2000, 02, 29),
-                new DateTime(2000, 03, 01)};
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2000, 03, 01)});
         }
 
-        [TestCase]
+        [Fact]
         public void RunDateSequenceForEveryThirdDay()
         {
             var template = new DailyScheduleTemplate(3);
@@ -47,33 +47,32 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2000, 02, 26),
                 new DateTime(2000, 02, 29),
                 new DateTime(2000, 03, 03),
                 new DateTime(2000, 03, 06),
-                new DateTime(2000, 03, 09)};
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2000, 03, 09)});
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateEveryNotZero()
         {
             var template = new DailyScheduleTemplate(0);
 
             var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("Daily schedule must occur atleast every 1 days"));
+
+            errors.Should().BeEquivalentTo(new string[] { "Daily schedule must occur atleast every 1 days" });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateEveryNotLessThanZero()
         {
             var template = new DailyScheduleTemplate(-3);
 
             var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("Daily schedule must occur atleast every 1 days"));
+
+            errors.Should().BeEquivalentTo(new string[] { "Daily schedule must occur atleast every 1 days" });
         }
 
     }

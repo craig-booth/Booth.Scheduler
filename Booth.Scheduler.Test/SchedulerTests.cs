@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
+using FluentAssertions.Execution;
 
 using Booth.Scheduler.Fluent;
 
 namespace Booth.Scheduler.Test
 {
-    class SchedulerTests
+    public class SchedulerTests
     {
 
-        [TestCase]
+        [Fact]
         public void AddJobsTest()
         {
             var scheduler = new Scheduler();
@@ -19,8 +21,6 @@ namespace Booth.Scheduler.Test
 
             scheduler.AddJob("Test", () => { }, Schedule.EveryDay().At(9, 00), DateTime.Today);
             scheduler.AddJob("Test2", () => { }, Schedule.EveryMonth().OnFirstDay().At(9, 00), DateTime.Today);
-
-            var jobs = scheduler.Jobs.OrderBy(x => x.Name).ToList();
 
             DateTime next1;
             if (DateTime.Now.Hour >= 9)
@@ -34,43 +34,36 @@ namespace Booth.Scheduler.Test
             else
                 next2 = new DateTime(DateTime.Today.Year, DateTime.Today.Month + 1, 1, 9, 0, 0);
 
-            Assert.Multiple(() =>
+            scheduler.Jobs.Should().BeEquivalentTo(new object[]
             {
-                Assert.That(jobs, Has.Count.EqualTo(2));
-
-                Assert.That(jobs[0].Name, Is.EqualTo("Test"));
-                Assert.That(jobs[0].Description, Is.EqualTo("Run every day, at 9:00"));
-                Assert.That(jobs[0].Status, Is.EqualTo(JobStatus.Active));
-                Assert.That(jobs[0].NextRunTime, Is.EqualTo(next1));
-
-                Assert.That(jobs[1].Name, Is.EqualTo("Test2"));
-                Assert.That(jobs[1].Description, Is.EqualTo("Run on the first day of every month, at 9:00"));
-                Assert.That(jobs[1].Status, Is.EqualTo(JobStatus.Active));
-                Assert.That(jobs[1].NextRunTime, Is.EqualTo(next2));
+                new { Name = "Test", Description = "Run every day, at 9:00", Status = JobStatus.Active, NextRunTime = next1 },
+                new { Name = "Test2", Description = "Run on the first day of every month, at 9:00", Status = JobStatus.Active, NextRunTime = next2 },
             });
         }
 
-        [TestCase]
+        [Fact]
         public void AddJobWithTheSameNameTest()
         {
             var scheduler = new Scheduler();
 
             scheduler.AddJob("Test", () => { }, Schedule.EveryDay().At(9, 00), DateTime.Today);
 
-            Assert.That(() => scheduler.AddJob("Test", () => { }, Schedule.EveryDay().At(9, 00), DateTime.Today), Throws.ArgumentException);     
+            Action a = () => scheduler.AddJob("Test", () => { }, Schedule.EveryDay().At(9, 00), DateTime.Today);
+
+            a.Should().ThrowExactly<ArgumentException>();  
         }
 
-        [TestCase]
+        [Fact]
         public void StartTest()
         {
             var scheduler = new Scheduler();
 
             scheduler.Start();
 
-            Assert.That(scheduler.Running, Is.True);
+            scheduler.Running.Should().BeTrue();
         }
 
-        [TestCase]
+        [Fact]
         public void StopTest()
         {
             var scheduler = new Scheduler();
@@ -78,7 +71,7 @@ namespace Booth.Scheduler.Test
             scheduler.Start();
             scheduler.Stop();
 
-            Assert.That(scheduler.Running, Is.False);
+            scheduler.Running.Should().BeFalse();
         }
 
 

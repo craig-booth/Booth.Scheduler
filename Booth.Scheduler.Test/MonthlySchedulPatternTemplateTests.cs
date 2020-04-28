@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 
 namespace Booth.Scheduler.Test
 {
-    class MonthlySchedulePatternTemplateTests
+    public class MonthlySchedulePatternTemplateTests
     {
-        [TestCase]
+        [Fact]
         public void FirstRunDateOnFirstMonday()
         {
             var template = new MonthlyScheduleTemplate(1);
@@ -19,10 +20,10 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 07)));
+            actual.Should().Be(new DateTime(2019, 10, 07));
         }
 
-        [TestCase]
+        [Fact]
         public void FirstRunDateOnSecondWednesday()
         {
             var template = new MonthlyScheduleTemplate(1);
@@ -34,10 +35,10 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 09)));
+            actual.Should().Be(new DateTime(2019, 10, 09));
         }
 
-        [TestCase]
+        [Fact]
         public void FirstRunDateOnThirdFriday()
         {
             var template = new MonthlyScheduleTemplate(1);
@@ -49,10 +50,10 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(new DateTime(2019, 11, 15)));
+            actual.Should().Be(new DateTime(2019, 11, 15));
         }
 
-        [TestCase]
+        [Fact]
         public void FirstRunDateOnFourthSaturday()
         {
             var template = new MonthlyScheduleTemplate(1);
@@ -64,10 +65,10 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 26)));
+            actual.Should().Be(new DateTime(2019, 10, 26));
         }
 
-        [TestCase]
+        [Fact]
         public void FirstRunDateOnLastWednesday()
         {
             var template = new MonthlyScheduleTemplate(1);
@@ -79,10 +80,10 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(new DateTime(2019, 10, 30)));
+            actual.Should().Be(new DateTime(2019, 10, 30));
         }
 
-        [TestCase]
+        [Fact]
         public void RunEvery3MonthsOnSecondTuesday()
         {
             var template = new MonthlyScheduleTemplate(3);
@@ -94,17 +95,16 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2019, 11, 12),
                 new DateTime(2020, 02, 11),
                 new DateTime(2020, 05, 12),
                 new DateTime(2020, 08, 11),
-                new DateTime(2020, 11, 10)};
-
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2020, 11, 10)
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void RunEveryMonthOnLastThursday()
         {
             var template = new MonthlyScheduleTemplate(1);
@@ -116,17 +116,16 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2019, 10, 31),
                 new DateTime(2019, 11, 28),
                 new DateTime(2019, 12, 26),
                 new DateTime(2020, 01, 30),
-                new DateTime(2020, 02, 27)};
-
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2020, 02, 27)
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void RunEvery3MonthsOnFirstDay()
         {
             var template = new MonthlyScheduleTemplate(3);
@@ -137,17 +136,16 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2019, 11, 01),
                 new DateTime(2020, 02, 01),
                 new DateTime(2020, 05, 01),
                 new DateTime(2020, 08, 01),
-                new DateTime(2020, 11, 01)};
-
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2020, 11, 01)
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void RunEvery2MonthsOnLastDay()
         {
             var template = new MonthlyScheduleTemplate(2);
@@ -158,17 +156,16 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2019, 10, 31),
                 new DateTime(2019, 12, 31),
                 new DateTime(2020, 02, 29),
                 new DateTime(2020, 04, 30),
-                new DateTime(2020, 06, 30)};
-
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2020, 06, 30)
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void RunEvery2MonthsOnFirstWeekDay()
         {
             var template = new MonthlyScheduleTemplate(2);
@@ -179,17 +176,16 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2019, 11, 01),
                 new DateTime(2020, 01, 01),
                 new DateTime(2020, 03, 02),
                 new DateTime(2020, 05, 01),
-                new DateTime(2020, 07, 01)};
-
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2020, 07, 01)
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void RunEveryMonthOnLastWeekDay()
         {
             var template = new MonthlyScheduleTemplate(1);
@@ -200,36 +196,35 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            var expected = new DateTime[] {
+            actual.Should().Equal(new DateTime[] {
                 new DateTime(2019, 10, 31),
                 new DateTime(2019, 11, 29),
                 new DateTime(2019, 12, 31),
                 new DateTime(2020, 01, 31),
-                new DateTime(2020, 02, 28)};
-
-            Assert.That(actual, Is.EqualTo(expected));
+                new DateTime(2020, 02, 28)
+            });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateEveryNotZero()
         {
             var template = new MonthlyScheduleTemplate(0);
             template.OccuranceType = OccuranceType.DayOfWeek;
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("Monthly schedule must occur atleast every 1 months"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] { "Monthly schedule must occur atleast every 1 months" });
         }
 
-        [TestCase]
+        [Fact]
         public void ValidateEveryNotLessThanZero()
         {
             var template = new MonthlyScheduleTemplate(-1);
             template.OccuranceType = OccuranceType.DayOfWeek;
 
-            var errors = template.Validate().ToList();
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors[0], Is.EqualTo("Monthly schedule must occur atleast every 1 months"));
+            var errors = template.Validate();
+
+            errors.Should().BeEquivalentTo(new string[] { "Monthly schedule must occur atleast every 1 months" });
         }
 
     }
