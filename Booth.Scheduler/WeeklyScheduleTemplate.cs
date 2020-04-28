@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+using Booth.Common;
+
 namespace Booth.Scheduler
 {
     public class WeeklyScheduleTemplate : IDateScheduleTemplate
@@ -23,9 +25,9 @@ namespace Booth.Scheduler
             set { _Days[(int)dayOfWeek] = value; }
         }
 
-        public IEnumerable<DateTime> GetDates(DateTime start)
+        public IEnumerable<Date> GetDates(Date start)
         {
-            var startDate = start.Date;
+            var startDate = start;
             var startOfPeriod = startDate.AddDays(-(int)start.DayOfWeek);
 
             // Get first date

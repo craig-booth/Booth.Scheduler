@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
+using Booth.Common;
+
 namespace Booth.Scheduler
 {
     public class DailyScheduleTemplate : IDateScheduleTemplate
@@ -16,9 +18,9 @@ namespace Booth.Scheduler
             Every = every;
         }
 
-        public IEnumerable<DateTime> GetDates(DateTime start)
+        public IEnumerable<Date> GetDates(Date start)
         {
-            var nextDate = start.Date;
+            var nextDate = start;
 
             while (true)
             {

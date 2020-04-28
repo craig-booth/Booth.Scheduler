@@ -17,9 +17,9 @@ namespace Booth.Scheduler
         public override string ToString()
         {
             if (Every == 1)
-                return "every minute between " + FromTime.ToString(@"h\:mm") + " and " + ToTime.ToString(@"h\:mm");
+                return "every minute between " + FromTime.ToString(@"H\:mm") + " and " + ToTime.ToString(@"H\:mm");
             else
-                return "every " + Every.ToString() + " minutes between " + FromTime.ToString(@"h\:mm") + " and " + ToTime.ToString(@"h\:mm");
+                return "every " + Every.ToString() + " minutes between " + FromTime.ToString(@"H\:mm") + " and " + ToTime.ToString(@"H\:mm");
 
         }
     }

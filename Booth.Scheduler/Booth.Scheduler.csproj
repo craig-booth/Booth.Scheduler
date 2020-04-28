@@ -15,4 +15,8 @@
     <None Include="Booth.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Booth.Common" Version="1.0.4" />
+  </ItemGroup>
+
 </Project>

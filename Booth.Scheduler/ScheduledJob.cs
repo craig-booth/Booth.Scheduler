@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Booth.Common;
+
 namespace Booth.Scheduler
 {
     public enum JobStatus { Active, Stopped, Complete } 

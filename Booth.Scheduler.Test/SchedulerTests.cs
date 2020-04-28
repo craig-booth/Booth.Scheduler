@@ -31,6 +31,8 @@ namespace Booth.Scheduler.Test
             DateTime next2;
             if (DateTime.Today.Day == 1)
                 next2 = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1, 9, 0, 0);
+            else if (DateTime.Today.Month == 12)
+                next2 = new DateTime(DateTime.Today.Year + 1, 1, 1, 9, 0, 0);
             else
                 next2 = new DateTime(DateTime.Today.Year, DateTime.Today.Month + 1, 1, 9, 0, 0);
 
