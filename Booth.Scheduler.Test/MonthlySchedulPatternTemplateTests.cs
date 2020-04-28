@@ -4,6 +4,8 @@ using System.Linq;
 using Xunit;
 using FluentAssertions;
 
+using Booth.Common;
+
 namespace Booth.Scheduler.Test
 {
     public class MonthlySchedulePatternTemplateTests
@@ -16,11 +18,11 @@ namespace Booth.Scheduler.Test
             template.Occurance = Occurance.First;
             template.Day = DayOfWeek.Monday;
 
-            var startDate = new DateTime(2019, 10, 01, 04, 34, 56);
+            var startDate = new Date(2019, 10, 01);
 
             var actual = template.GetDates(startDate).First();
 
-            actual.Should().Be(new DateTime(2019, 10, 07));
+            actual.Should().Be(new Date(2019, 10, 07));
         }
 
         [Fact]
@@ -31,11 +33,11 @@ namespace Booth.Scheduler.Test
             template.Occurance = Occurance.Second;
             template.Day = DayOfWeek.Wednesday;
 
-            var startDate = new DateTime(2019, 10, 09, 04, 34, 56);
+            var startDate = new Date(2019, 10, 09);
 
             var actual = template.GetDates(startDate).First();
 
-            actual.Should().Be(new DateTime(2019, 10, 09));
+            actual.Should().Be(new Date(2019, 10, 09));
         }
 
         [Fact]
@@ -46,11 +48,11 @@ namespace Booth.Scheduler.Test
             template.Occurance = Occurance.Third;
             template.Day = DayOfWeek.Friday;
 
-            var startDate = new DateTime(2019, 10, 26, 04, 34, 56);
+            var startDate = new Date(2019, 10, 26);
 
             var actual = template.GetDates(startDate).First();
 
-            actual.Should().Be(new DateTime(2019, 11, 15));
+            actual.Should().Be(new Date(2019, 11, 15));
         }
 
         [Fact]
@@ -61,11 +63,11 @@ namespace Booth.Scheduler.Test
             template.Occurance = Occurance.Fourth;
             template.Day = DayOfWeek.Saturday;
 
-            var startDate = new DateTime(2019, 10, 26, 04, 34, 56);
+            var startDate = new Date(2019, 10, 26);
 
             var actual = template.GetDates(startDate).First();
 
-            actual.Should().Be(new DateTime(2019, 10, 26));
+            actual.Should().Be(new Date(2019, 10, 26));
         }
 
         [Fact]
@@ -76,11 +78,11 @@ namespace Booth.Scheduler.Test
             template.Occurance = Occurance.Last;
             template.Day = DayOfWeek.Wednesday;
 
-            var startDate = new DateTime(2019, 10, 26, 04, 34, 56);
+            var startDate = new Date(2019, 10, 26);
 
             var actual = template.GetDates(startDate).First();
 
-            actual.Should().Be(new DateTime(2019, 10, 30));
+            actual.Should().Be(new Date(2019, 10, 30));
         }
 
         [Fact]
@@ -91,16 +93,16 @@ namespace Booth.Scheduler.Test
             template.Occurance = Occurance.Second;
             template.Day = DayOfWeek.Tuesday;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2019, 11, 12),
-                new DateTime(2020, 02, 11),
-                new DateTime(2020, 05, 12),
-                new DateTime(2020, 08, 11),
-                new DateTime(2020, 11, 10)
+            actual.Should().Equal(new Date[] {
+                new Date(2019, 11, 12),
+                new Date(2020, 02, 11),
+                new Date(2020, 05, 12),
+                new Date(2020, 08, 11),
+                new Date(2020, 11, 10)
             });
         }
 
@@ -112,16 +114,16 @@ namespace Booth.Scheduler.Test
             template.Occurance = Occurance.Last;
             template.Day = DayOfWeek.Thursday;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2019, 10, 31),
-                new DateTime(2019, 11, 28),
-                new DateTime(2019, 12, 26),
-                new DateTime(2020, 01, 30),
-                new DateTime(2020, 02, 27)
+            actual.Should().Equal(new Date[] {
+                new Date(2019, 10, 31),
+                new Date(2019, 11, 28),
+                new Date(2019, 12, 26),
+                new Date(2020, 01, 30),
+                new Date(2020, 02, 27)
             });
         }
 
@@ -132,16 +134,16 @@ namespace Booth.Scheduler.Test
             template.OccuranceType = OccuranceType.Day;
             template.Occurance = Occurance.First;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2019, 11, 01),
-                new DateTime(2020, 02, 01),
-                new DateTime(2020, 05, 01),
-                new DateTime(2020, 08, 01),
-                new DateTime(2020, 11, 01)
+            actual.Should().Equal(new Date[] {
+                new Date(2019, 11, 01),
+                new Date(2020, 02, 01),
+                new Date(2020, 05, 01),
+                new Date(2020, 08, 01),
+                new Date(2020, 11, 01)
             });
         }
 
@@ -152,16 +154,16 @@ namespace Booth.Scheduler.Test
             template.OccuranceType = OccuranceType.Day;
             template.Occurance = Occurance.Last;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2019, 10, 31),
-                new DateTime(2019, 12, 31),
-                new DateTime(2020, 02, 29),
-                new DateTime(2020, 04, 30),
-                new DateTime(2020, 06, 30)
+            actual.Should().Equal(new Date[] {
+                new Date(2019, 10, 31),
+                new Date(2019, 12, 31),
+                new Date(2020, 02, 29),
+                new Date(2020, 04, 30),
+                new Date(2020, 06, 30)
             });
         }
 
@@ -172,16 +174,16 @@ namespace Booth.Scheduler.Test
             template.OccuranceType = OccuranceType.Weekday;
             template.Occurance = Occurance.First;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2019, 11, 01),
-                new DateTime(2020, 01, 01),
-                new DateTime(2020, 03, 02),
-                new DateTime(2020, 05, 01),
-                new DateTime(2020, 07, 01)
+            actual.Should().Equal(new Date[] {
+                new Date(2019, 11, 01),
+                new Date(2020, 01, 01),
+                new Date(2020, 03, 02),
+                new Date(2020, 05, 01),
+                new Date(2020, 07, 01)
             });
         }
 
@@ -192,16 +194,16 @@ namespace Booth.Scheduler.Test
             template.OccuranceType = OccuranceType.Weekday;
             template.Occurance = Occurance.Last;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2019, 10, 31),
-                new DateTime(2019, 11, 29),
-                new DateTime(2019, 12, 31),
-                new DateTime(2020, 01, 31),
-                new DateTime(2020, 02, 28)
+            actual.Should().Equal(new Date[] {
+                new Date(2019, 10, 31),
+                new Date(2019, 11, 29),
+                new Date(2019, 12, 31),
+                new Date(2020, 01, 31),
+                new Date(2020, 02, 28)
             });
         }
 

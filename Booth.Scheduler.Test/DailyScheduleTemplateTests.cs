@@ -4,7 +4,7 @@ using System.Linq;
 using Xunit;
 using FluentAssertions;
 
-daysInMonth
+using Booth.Common;
 
 namespace Booth.Scheduler.Test
 {
@@ -20,7 +20,7 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).First();
 
-            Assert.That(actual, Is.EqualTo(startDat));
+            actual.Should().Be(startDate);
         }
 
         [Fact]
@@ -32,12 +32,12 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2000, 02, 26),
-                new DateTime(2000, 02, 27),
-                new DateTime(2000, 02, 28),
-                new DateTime(2000, 02, 29),
-                new DateTime(2000, 03, 01)});
+            actual.Should().Equal(new Date[] {
+                new Date(2000, 02, 26),
+                new Date(2000, 02, 27),
+                new Date(2000, 02, 28),
+                new Date(2000, 02, 29),
+                new Date(2000, 03, 01)});
         }
 
         [Fact]
@@ -49,12 +49,12 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetDates(startDate).Take(5);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2000, 02, 26),
-                new DateTime(2000, 02, 29),
-                new DateTime(2000, 03, 03),
-                new DateTime(2000, 03, 06),
-                new DateTime(2000, 03, 09)});
+            actual.Should().Equal(new Date[] {
+                new Date(2000, 02, 26),
+                new Date(2000, 02, 29),
+                new Date(2000, 03, 03),
+                new Date(2000, 03, 06),
+                new Date(2000, 03, 09)});
         }
 
         [Fact]

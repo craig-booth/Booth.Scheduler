@@ -5,6 +5,7 @@ using Xunit;
 using FluentAssertions;
 using FluentAssertions.Execution;
 
+using Booth.Common;
 using Booth.Scheduler.Fluent;
 
 namespace Booth.Scheduler.Test
@@ -21,7 +22,7 @@ namespace Booth.Scheduler.Test
             using (new AssertionScope())
             {
                 schedule.DateTemplate.Should().BeOfType<MonthlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 1, OccuranceType = OccuranceType.None, DayNumber = 20 });
-                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new TimeSpan(07, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new Time(07, 00, 00) });
                 schedule.ToString().Should().Be("Run on the 20th of every month, at 7:00");
             }
         }
@@ -34,7 +35,7 @@ namespace Booth.Scheduler.Test
             using (new AssertionScope())
             {
                 schedule.DateTemplate.Should().BeOfType<MonthlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 1, OccuranceType = OccuranceType.DayOfWeek, Occurance = Occurance.First, Day = DayOfWeek.Monday });
-                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new TimeSpan(07, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new Time(07, 00, 00) });
                 schedule.ToString().Should().Be("Run on the first Monday of every month, at 7:00");
             }
         }
@@ -47,7 +48,7 @@ namespace Booth.Scheduler.Test
             using (new AssertionScope())
             {
                 schedule.DateTemplate.Should().BeOfType<MonthlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 2, OccuranceType = OccuranceType.DayOfWeek, Occurance = Occurance.Second, Day = DayOfWeek.Wednesday });
-                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new TimeSpan(07, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new Time(07, 00, 00) });
                 schedule.ToString().Should().Be("Run on the second Wednesday of every 2 months, at 7:00");
             }
         }
@@ -60,7 +61,7 @@ namespace Booth.Scheduler.Test
             using (new AssertionScope())
             {
                 schedule.DateTemplate.Should().BeOfType<MonthlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 1, OccuranceType = OccuranceType.DayOfWeek, Occurance = Occurance.Third, Day = DayOfWeek.Saturday });
-                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new TimeSpan(07, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new Time(07, 00, 00) });
                 schedule.ToString().Should().Be("Run on the third Saturday of every month, at 7:00");
             }
         }
@@ -73,7 +74,7 @@ namespace Booth.Scheduler.Test
             using (new AssertionScope())
             {
                 schedule.DateTemplate.Should().BeOfType<MonthlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 1, OccuranceType = OccuranceType.DayOfWeek, Occurance = Occurance.Fourth, Day = DayOfWeek.Sunday });
-                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new TimeSpan(07, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new Time(07, 00, 00) });
                 schedule.ToString().Should().Be("Run on the fourth Sunday of every month, at 7:00");
             }
         }
@@ -87,7 +88,7 @@ namespace Booth.Scheduler.Test
             using (new AssertionScope())
             {
                 schedule.DateTemplate.Should().BeOfType<MonthlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 2, OccuranceType = OccuranceType.DayOfWeek, Occurance = Occurance.Last, Day = DayOfWeek.Friday });
-                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new TimeSpan(07, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new Time(07, 00, 00) });
                 schedule.ToString().Should().Be("Run on the last Friday of every 2 months, at 7:00");
             }
         }
@@ -100,7 +101,7 @@ namespace Booth.Scheduler.Test
             using (new AssertionScope())
             {
                 schedule.DateTemplate.Should().BeOfType<MonthlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 2, OccuranceType = OccuranceType.Day, Occurance = Occurance.Last });
-                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new TimeSpan(07, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new Time(07, 00, 00) });
                 schedule.ToString().Should().Be("Run on the last day of every 2 months, at 7:00");
             }
         }
@@ -113,7 +114,7 @@ namespace Booth.Scheduler.Test
             using (new AssertionScope())
             {
                 schedule.DateTemplate.Should().BeOfType<MonthlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 2, OccuranceType = OccuranceType.Weekday, Occurance = Occurance.First });
-                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new TimeSpan(07, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new Time(07, 00, 00) });
                 schedule.ToString().Should().Be("Run on the first weekday of every 2 months, at 7:00");
             }
         }
@@ -126,7 +127,7 @@ namespace Booth.Scheduler.Test
             using (new AssertionScope())
             {
                 schedule.DateTemplate.Should().BeOfType<MonthlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 2, OccuranceType = OccuranceType.Weekday, Occurance = Occurance.Last });
-                schedule.TimeTemplate.Should().BeOfType<HourlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 1, FromTime = new TimeSpan(09, 00, 00), ToTime = new TimeSpan(17, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<HourlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 1, FromTime = new Time(09, 00, 00), ToTime = new Time(17, 00, 00) });
                 schedule.ToString().Should().Be("Run on the last weekday of every 2 months, every hour between 9:00 and 17:00");
             }
         }

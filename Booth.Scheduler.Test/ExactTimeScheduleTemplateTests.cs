@@ -4,6 +4,8 @@ using System.Linq;
 using Xunit;
 using FluentAssertions;
 
+using Booth.Common;
+
 namespace Booth.Scheduler.Test
 {
     public class ExactTimeScheduleTemplateTests
@@ -16,27 +18,7 @@ namespace Booth.Scheduler.Test
 
             var actual = template.GetTimes();
 
-            actual.Should().Equal(new TimeSpan[] { new TimeSpan(13, 32, 00) });
-        }
-
-        [Fact]
-        public void ValidateTimePositive()
-        {
-            var template = new ExactTimeScheduleTemplate(-1, 00);
-
-            var errors = template.Validate();
-
-            errors.Should().BeEquivalentTo(new string[] { "Time must be less than 1 day" });
-        }
-
-        [Fact]
-        public void ValidateTimeLessThanOneDay()
-        {
-            var template = new ExactTimeScheduleTemplate(26, 80);
-
-            var errors = template.Validate();
-
-            errors.Should().BeEquivalentTo(new string[] { "Time must be less than 1 day" });
+            actual.Should().Equal(new Time[] { new Time(13, 32, 00) });
         }
 
     }

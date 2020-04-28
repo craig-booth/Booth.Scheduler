@@ -5,6 +5,7 @@ using Xunit;
 using FluentAssertions;
 using FluentAssertions.Execution;
 
+using Booth.Common;
 using Booth.Scheduler.Fluent;
 
 namespace Booth.Scheduler.Test
@@ -30,7 +31,7 @@ namespace Booth.Scheduler.Test
                 weeklySchedule[DayOfWeek.Friday].Should().BeFalse();
                 weeklySchedule[DayOfWeek.Saturday].Should().BeFalse();
 
-                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new TimeSpan(14, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new Time(14, 00, 00) });
                 schedule.ToString().Should().Be("Run every week on Monday, at 14:00");
             }
         }
@@ -53,7 +54,7 @@ namespace Booth.Scheduler.Test
                 weeklySchedule[DayOfWeek.Friday].Should().BeTrue();
                 weeklySchedule[DayOfWeek.Saturday].Should().BeFalse();
 
-                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new TimeSpan(14, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new Time(14, 00, 00) });
                 schedule.ToString().Should().Be("Run every week on Monday, Tuesday, Wednesday, Thursday and Friday, at 14:00");
             }
         }
@@ -76,7 +77,7 @@ namespace Booth.Scheduler.Test
                 weeklySchedule[DayOfWeek.Friday].Should().BeTrue();
                 weeklySchedule[DayOfWeek.Saturday].Should().BeFalse();
 
-                schedule.TimeTemplate.Should().BeOfType<HourlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 2, FromTime = new TimeSpan(09, 00, 00), ToTime = new TimeSpan(17, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<HourlyScheduleTemplate>().And.BeEquivalentTo(new { Every = 2, FromTime = new Time(09, 00, 00), ToTime = new Time(17, 00, 00) });
                 schedule.ToString().Should().Be("Run every week on Monday, Tuesday, Wednesday, Thursday and Friday, every 2 hours between 9:00 and 17:00");
             }
         }
@@ -100,7 +101,7 @@ namespace Booth.Scheduler.Test
                 weeklySchedule[DayOfWeek.Friday].Should().BeFalse();
                 weeklySchedule[DayOfWeek.Saturday].Should().BeFalse();
 
-                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new TimeSpan(07, 00, 00) });
+                schedule.TimeTemplate.Should().BeOfType<ExactTimeScheduleTemplate>().And.BeEquivalentTo(new { Time = new Time(07, 00, 00) });
                 schedule.ToString().Should().Be("Run every 2 weeks on Tuesday, Wednesday and Thursday, at 7:00");
             }
         }

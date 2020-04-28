@@ -4,6 +4,8 @@ using System.Linq;
 using Xunit;
 using FluentAssertions;
 
+using Booth.Common;
+
 namespace Booth.Scheduler.Test
 {
     public class WeeklyScheduleTemplateTests
@@ -14,11 +16,11 @@ namespace Booth.Scheduler.Test
             var template = new WeeklyScheduleTemplate(1);
             template[DayOfWeek.Wednesday] = true;
 
-            var startDate = new DateTime(2019, 10, 23, 04, 34, 56);
+            var startDate = new Date(2019, 10, 23);
 
             var actual = template.GetDates(startDate).First();
 
-            actual.Should().Be(startDate.Date);
+            actual.Should().Be(startDate);
         }
 
         [Fact]
@@ -27,11 +29,11 @@ namespace Booth.Scheduler.Test
             var template = new WeeklyScheduleTemplate(1);
             template[DayOfWeek.Wednesday] = true;
 
-            var startDate = new DateTime(2019, 10, 21, 04, 34, 56);
+            var startDate = new Date(2019, 10, 21);
 
             var actual = template.GetDates(startDate).First();
 
-            actual.Should().Be(new DateTime(2019, 10, 23));
+            actual.Should().Be(new Date(2019, 10, 23));
         }
 
         [Fact]
@@ -40,11 +42,11 @@ namespace Booth.Scheduler.Test
             var template = new WeeklyScheduleTemplate(1);
             template[DayOfWeek.Wednesday] = true;
 
-            var startDate = new DateTime(2019, 10, 25, 04, 34, 56);
+            var startDate = new Date(2019, 10, 25);
 
             var actual = template.GetDates(startDate).First();
 
-            actual.Should().Be(new DateTime(2019, 10, 30));
+            actual.Should().Be(new Date(2019, 10, 30));
         }
 
         [Fact]
@@ -54,11 +56,11 @@ namespace Booth.Scheduler.Test
             template[DayOfWeek.Wednesday] = true;
             template[DayOfWeek.Saturday] = true;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).First();
 
-            actual.Should().Be(new DateTime(2019, 10, 26));
+            actual.Should().Be(new Date(2019, 10, 26));
         }
 
         [Fact]
@@ -67,16 +69,16 @@ namespace Booth.Scheduler.Test
             var template = new WeeklyScheduleTemplate(1);
             template[DayOfWeek.Monday] = true;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2019, 10, 28),
-                new DateTime(2019, 11, 04),
-                new DateTime(2019, 11, 11),
-                new DateTime(2019, 11, 18),
-                new DateTime(2019, 11, 25)
+            actual.Should().Equal(new Date[] {
+                new Date(2019, 10, 28),
+                new Date(2019, 11, 04),
+                new Date(2019, 11, 11),
+                new Date(2019, 11, 18),
+                new Date(2019, 11, 25)
             });
         }
 
@@ -86,16 +88,16 @@ namespace Booth.Scheduler.Test
             var template = new WeeklyScheduleTemplate(2);
             template[DayOfWeek.Monday] = true;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2019, 10, 28),
-                new DateTime(2019, 11, 11),
-                new DateTime(2019, 11, 25),
-                new DateTime(2019, 12, 09),
-                new DateTime(2019, 12, 23)
+            actual.Should().Equal(new Date[] {
+                new Date(2019, 10, 28),
+                new Date(2019, 11, 11),
+                new Date(2019, 11, 25),
+                new Date(2019, 12, 09),
+                new Date(2019, 12, 23)
             });
         }
 
@@ -106,16 +108,16 @@ namespace Booth.Scheduler.Test
             template[DayOfWeek.Wednesday] = true;
             template[DayOfWeek.Sunday] = true;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(5);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2019, 10, 27),
-                new DateTime(2019, 10, 30),
-                new DateTime(2019, 11, 03),
-                new DateTime(2019, 11, 06),
-                new DateTime(2019, 11, 10)
+            actual.Should().Equal(new Date[] {
+                new Date(2019, 10, 27),
+                new Date(2019, 10, 30),
+                new Date(2019, 11, 03),
+                new Date(2019, 11, 06),
+                new Date(2019, 11, 10)
             });
         }
 
@@ -129,21 +131,21 @@ namespace Booth.Scheduler.Test
             template[DayOfWeek.Thursday] = true;
             template[DayOfWeek.Friday] = true;
 
-            var startDate = new DateTime(2019, 10, 24, 04, 34, 56);
+            var startDate = new Date(2019, 10, 24);
 
             var actual = template.GetDates(startDate).Take(10);
 
-            actual.Should().Equal(new DateTime[] {
-                new DateTime(2019, 10, 24),
-                new DateTime(2019, 10, 25),
-                new DateTime(2019, 11, 18),
-                new DateTime(2019, 11, 19),
-                new DateTime(2019, 11, 20),
-                new DateTime(2019, 11, 21),
-                new DateTime(2019, 11, 22),
-                new DateTime(2019, 12, 16),
-                new DateTime(2019, 12, 17),
-                new DateTime(2019, 12, 18)
+            actual.Should().Equal(new Date[] {
+                new Date(2019, 10, 24),
+                new Date(2019, 10, 25),
+                new Date(2019, 11, 18),
+                new Date(2019, 11, 19),
+                new Date(2019, 11, 20),
+                new Date(2019, 11, 21),
+                new Date(2019, 11, 22),
+                new Date(2019, 12, 16),
+                new Date(2019, 12, 17),
+                new Date(2019, 12, 18)
             });
         }
 
